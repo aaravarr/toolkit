@@ -77,7 +77,7 @@ function navigate(path: string) {
         :class="railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0'"
         style="color: var(--text-primary)"
       >
-        ToolKit
+        X-Utils
       </span>
     </div>
 
@@ -224,7 +224,7 @@ function navigate(path: string) {
       <!-- Logo + Title -->
       <div class="flex items-center absolute left-1/2 -translate-x-1/2">
         <img src="/favicon.svg" alt="Logo" class="h-6 w-6" />
-        <span class="ml-2 text-sm font-semibold" style="color: var(--text-primary)">ToolKit</span>
+        <span class="ml-2 text-sm font-semibold" style="color: var(--text-primary)">X-Utils</span>
       </div>
 
       <!-- Dark mode toggle -->
@@ -274,7 +274,7 @@ function navigate(path: string) {
               <div class="flex items-center justify-between px-5 h-14 shrink-0 border-b" style="border-color: var(--border)">
                 <div class="flex items-center">
                   <img src="/favicon.svg" alt="Logo" class="h-6 w-6" />
-                  <span class="ml-2 text-sm font-semibold" style="color: var(--text-primary)">ToolKit</span>
+                  <span class="ml-2 text-sm font-semibold" style="color: var(--text-primary)">X-Utils</span>
                 </div>
                 <button
                   type="button"

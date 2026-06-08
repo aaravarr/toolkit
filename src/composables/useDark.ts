@@ -7,7 +7,7 @@ function getSystemPreference(): boolean {
 }
 
 function getStoredPreference(): boolean | null {
-  const stored = localStorage.getItem('toolkit-dark-mode')
+  const stored = localStorage.getItem('xutils-dark-mode')
   if (stored === null) return null
   return stored === 'true'
 }
@@ -37,7 +37,7 @@ if (typeof window !== 'undefined') {
 
 watch(isDark, (value) => {
   applyTheme(value)
-  localStorage.setItem('toolkit-dark-mode', String(value))
+  localStorage.setItem('xutils-dark-mode', String(value))
 })
 
 export function useDark() {

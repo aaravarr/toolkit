@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-const SITE_NAME = 'ToolKit'
+const SITE_NAME = 'X-Utils'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

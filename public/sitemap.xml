@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://your-domain.com</loc>
+    <loc>https://xutils.net</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/json-to-table</loc>
+    <loc>https://xutils.net/json-to-table</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/timestamp</loc>
+    <loc>https://xutils.net/timestamp</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/encoding</loc>
+    <loc>https://xutils.net/encoding</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/diff</loc>
+    <loc>https://xutils.net/diff</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/csv-tool</loc>
+    <loc>https://xutils.net/csv-tool</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/color-tools</loc>
+    <loc>https://xutils.net/color-tools</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/html-preview</loc>
+    <loc>https://xutils.net/html-preview</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/ip-lookup</loc>
+    <loc>https://xutils.net/ip-lookup</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/document-splitter</loc>
+    <loc>https://xutils.net/document-splitter</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/url-params</loc>
+    <loc>https://xutils.net/url-params</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.com/id-card</loc>
+    <loc>https://xutils.net/id-card</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
