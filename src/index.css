@@ -270,10 +270,18 @@
   /* Tool page wrapper */
   .tool-page {
     background: var(--bg-primary);
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    padding: 28px 32px;
+    border-radius: 0;
+    border: none;
+    padding: 16px;
     transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  @media (min-width: 640px) {
+    .tool-page {
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      padding: 28px 32px;
+    }
   }
 
   .tool-header h1 {

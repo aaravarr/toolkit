@@ -10,7 +10,7 @@ import ToolCard from '../components/ToolCard.vue'
 import CopyButton from '../components/CopyButton.vue'
 import {
   Clock,
-  Loader2,
+  Sparkles,
   CircleCheckBig,
   AlertCircle,
 } from 'lucide-vue-next'
@@ -281,7 +281,7 @@ function applyFormat(fmt: string) {
       <!-- ===== 智能解析区 ===== -->
       <section>
         <h2 class="text-sm font-semibold text-content-secondary mb-3 flex items-center gap-1.5">
-          <Loader2 class="h-4 w-4 animate-spin" />
+          <Sparkles class="h-4 w-4" />
           智能解析
         </h2>
 

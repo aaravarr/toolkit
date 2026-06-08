@@ -17,7 +17,7 @@ import Navigation from './views/Navigation.vue'
   <div class="lg:hidden min-h-screen bg-surface-secondary">
     <Navigation mode="mobile" />
     <main class="pt-14">
-      <div class="p-4">
+      <div>
         <router-view />
       </div>
     </main>

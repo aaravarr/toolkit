@@ -2,7 +2,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import {
-  Menu,
+  Grip,
   X,
   Sun,
   Moon,
@@ -227,11 +227,11 @@ function navigate(path: string) {
         @click="drawerOpen = true"
       >
         <span class="sr-only">打开导航</span>
-        <Menu class="h-5 w-5" />
+        <Grip class="h-5 w-5" />
       </button>
 
       <!-- Logo + Title -->
-      <div class="flex items-center absolute left-1/2 -translate-x-1/2">
+      <div class="flex items-center absolute left-1/2 -translate-x-1/2 cursor-pointer" @click="navigate('/')">
         <img src="/favicon.svg" alt="Logo" class="h-6 w-6" />
         <span class="ml-2 text-sm font-semibold" style="color: var(--text-primary)">X-Utils</span>
       </div>
@@ -309,7 +309,7 @@ function navigate(path: string) {
                   ]"
                   :style="{ color: isCurrentRoute('/') ? 'var(--accent)' : 'var(--text-primary)' }"
                 >
-                  <HomeIcon class="h-5 w-5 shrink-0" style="color: inherit" />
+                  <Home class="h-5 w-5 shrink-0" style="color: inherit" />
                   首页
                 </button>
 
@@ -351,7 +351,7 @@ function navigate(path: string) {
                   ]"
                   :style="{ color: isCurrentRoute('/more') ? 'var(--accent)' : 'var(--text-primary)' }"
                 >
-                  <EllipsisHorizontalCircleIcon class="h-5 w-5 shrink-0" style="color: inherit" />
+                  <Ellipsis class="h-5 w-5 shrink-0" style="color: inherit" />
                   更多工具
                 </button>
               </nav>
