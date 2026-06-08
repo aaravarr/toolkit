@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@types/crypto-js": "^4.2.2",
+    "@types/diff": "^7.0.2",
     "@types/papaparse": "^5.3.15",
     "@vueuse/core": "^13.1.0",
     "color2k": "^2.0.3",
@@ -16,6 +17,7 @@
     "csv-parse": "^5.6.0",
     "csv-stringify": "^6.5.2",
     "dayjs": "^1.11.13",
+    "diff": "^9.0.0",
     "papaparse": "^5.5.2",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import CryptoJS from 'crypto-js'
+import ToolCard from '../components/ToolCard.vue'
+import CopyButton from '../components/CopyButton.vue'
 
 // 编码类型定义
 interface EncodingType {
@@ -442,8 +444,6 @@ const outputText = ref('')
 const selectedEncoding = ref(encodingTypes.value[0].id)
 // 当前操作模式（编码/解码）
 const isEncoding = ref(true)
-// 复制成功提示
-const copySuccess = ref(false)
 
 // 获取当前选择的编码类型对象
 const currentEncoding = computed(() => {
@@ -461,15 +461,6 @@ const processText = async () => {
   }
 }
 
-// 复制结果到剪贴板
-const copyResult = () => {
-  navigator.clipboard.writeText(outputText.value)
-  copySuccess.value = true
-  setTimeout(() => {
-    copySuccess.value = false
-  }, 2000)
-}
-
 // 清空输入和输出
 const clearAll = () => {
   inputText.value = ''
@@ -484,100 +475,86 @@ const toggleMode = () => {
 </script>
 
 <template>
-  <div class="space-y-6">
-    <div class="bg-white shadow sm:rounded-lg">
-      <div class="px-4 py-5 sm:p-6">
-        <h3 class="text-base font-semibold leading-6 text-gray-900">编码转换工具</h3>
-        <div class="mt-2 max-w-xl text-sm text-gray-500">
-          <p>支持多种编码格式的编码和解码功能</p>
+  <ToolCard title="编码转换" description="支持多种编码格式的编码和解码功能">
+
+    <div class="space-y-6">
+      <!-- 编码类型选择 -->
+      <div class="space-y-4">
+        <div>
+          <label class="label-text">编码类型</label>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <select
+              v-model="selectedEncoding"
+              @change="processText"
+              class="select-field"
+            >
+              <option v-for="type in encodingTypes" :key="type.id" :value="type.id">
+                {{ type.name }} - {{ type.description }}
+              </option>
+            </select>
+          </div>
         </div>
-        
-        <div class="mt-5 space-y-6">
-          <!-- 编码类型选择 -->
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700">编码类型</label>
-              <div class="mt-1 relative rounded-md shadow-sm">
-                <select 
-                  v-model="selectedEncoding"
-                  @change="processText"
-                  class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
-                >
-                  <option v-for="type in encodingTypes" :key="type.id" :value="type.id">
-                    {{ type.name }} - {{ type.description }}
-                  </option>
-                </select>
-              </div>
+      </div>
+
+      <!-- 操作模式切换 -->
+      <div class="space-y-4">
+        <div>
+          <label class="label-text">操作模式</label>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <div class="flex gap-2">
+              <button
+                @click="toggleMode"
+                class="btn-primary whitespace-nowrap"
+              >
+                {{ isEncoding ? '切换到解码' : '切换到编码' }}
+              </button>
+              <button
+                @click="clearAll"
+                class="btn-secondary whitespace-nowrap"
+              >
+                清空
+              </button>
             </div>
           </div>
+        </div>
+      </div>
 
-          <!-- 操作模式切换 -->
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700">操作模式</label>
-              <div class="mt-1 relative rounded-md shadow-sm">
-                <div class="flex gap-2">
-                  <button 
-                    @click="toggleMode"
-                    class="inline-flex items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
-                  >
-                    {{ isEncoding ? '切换到解码' : '切换到编码' }}
-                  </button>
-                  <button 
-                    @click="clearAll"
-                    class="inline-flex items-center justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 whitespace-nowrap"
-                  >
-                    清空
-                  </button>
-                </div>
-              </div>
-            </div>
+      <!-- 输入区域 -->
+      <div class="space-y-4">
+        <div>
+          <label class="label-text">输入文本</label>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <textarea
+              v-model="inputText"
+              @input="processText"
+              rows="4"
+              class="textarea-field"
+              :placeholder="isEncoding ? '请输入要编码的文本' : '请输入要解码的文本'"
+            ></textarea>
           </div>
+        </div>
+      </div>
 
-          <!-- 输入区域 -->
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700">输入文本</label>
-              <div class="mt-1 relative rounded-md shadow-sm">
-                <textarea 
-                  v-model="inputText"
-                  @input="processText"
-                  rows="4"
-                  class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
-                  :placeholder="isEncoding ? '请输入要编码的文本' : '请输入要解码的文本'"
-                ></textarea>
-              </div>
-            </div>
-          </div>
-
-          <!-- 输出区域 -->
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700">输出结果</label>
-              <div class="mt-1 relative rounded-md shadow-sm">
-                <div class="relative">
-                  <textarea 
-                    v-model="outputText"
-                    rows="4"
-                    readonly
-                    class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-gray-50"
-                  ></textarea>
-                  <button 
-                    v-if="outputText"
-                    @click="copyResult"
-                    class="absolute top-2 right-2 inline-flex items-center rounded-md bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-nowrap"
-                  >
-                    复制结果
-                  </button>
-                  <div v-if="copySuccess" class="absolute top-0 right-0 mt-2 mr-2 text-xs text-green-600">
-                    已复制!
-                  </div>
-                </div>
+      <!-- 输出区域 -->
+      <div class="space-y-4">
+        <div>
+          <label class="label-text">输出结果</label>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <div class="relative">
+              <textarea
+                v-model="outputText"
+                rows="4"
+                readonly
+                class="textarea-field bg-surface-secondary"
+              ></textarea>
+              <div v-if="outputText" class="absolute top-2 right-2">
+                <CopyButton :text="outputText" label="复制结果" size="sm" />
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+
+  </ToolCard>
 </template> 

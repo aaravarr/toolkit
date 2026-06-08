@@ -1,23 +1,248 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
+import {
+  Bars3Icon,
+  XMarkIcon,
+  SunIcon,
+  MoonIcon,
+  HomeIcon,
+  EllipsisHorizontalCircleIcon,
+} from '@heroicons/vue/24/outline'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { navigationTools } from '../config/tools'
+import { useDark } from '../composables/useDark'
+import { implementedTools, toolCategories, type Tool, type ToolCategory } from '../config/tools'
+
+const props = defineProps<{
+  mode: 'rail' | 'mobile'
+}>()
 
 const router = useRouter()
 const route = useRoute()
-const navigation = ref(navigationTools)
-const sidebarOpen = ref(false)
+const { isDark, toggle: toggleDark } = useDark()
+
+// Mobile drawer state
+const drawerOpen = ref(false)
+
+// Rail hover state
+const railHovered = ref(false)
+const labelFading = ref(false)
+
+// 切换时短暂淡入淡出
+watch(railHovered, () => {
+  labelFading.value = true
+  setTimeout(() => { labelFading.value = false }, 50)
+})
 
 const isCurrentRoute = (path: string) => route.path === path
+
+// Tools grouped by category
+const toolsByCategory = computed(() => {
+  const map: Record<ToolCategory, Tool[]> = { text: [], data: [], dev: [] }
+  implementedTools.forEach(tool => {
+    if (tool.category) {
+      map[tool.category].push(tool)
+    }
+  })
+  return map
+})
+
+function navigate(path: string) {
+  router.push(path)
+  if (props.mode === 'mobile') {
+    drawerOpen.value = false
+  }
+}
 </script>
 
 <template>
-  <div>
-    <!-- 移动端侧边栏 -->
-    <TransitionRoot as="template" :show="sidebarOpen">
-      <Dialog as="div" class="relative z-50 lg:hidden" @close="sidebarOpen = false">
+  <!-- ===== RAIL MODE (Desktop) ===== -->
+  <div
+    v-if="mode === 'rail'"
+    class="fixed inset-y-0 left-0 z-50 hidden lg:flex flex-col border-r transition-all duration-200 ease-in-out overflow-hidden"
+    :style="{
+      width: railHovered ? 'var(--nav-width-expanded)' : 'var(--nav-width)',
+      backgroundColor: 'var(--bg-primary)',
+      borderColor: 'var(--border)',
+      boxShadow: railHovered ? 'var(--shadow-elevated)' : 'none',
+    }"
+    @mouseenter="railHovered = true"
+    @mouseleave="railHovered = false"
+  >
+    <!-- Logo -->
+    <div class="flex items-center shrink-0 h-14 px-4">
+      <img src="/favicon.svg" alt="Logo" class="h-7 w-7 shrink-0" />
+      <span
+        class="text-sm font-semibold whitespace-nowrap transition-all duration-200 overflow-hidden"
+        :class="railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0'"
+        style="color: var(--text-primary)"
+      >
+        ToolKit
+      </span>
+    </div>
+
+    <!-- Tool list -->
+    <nav class="flex-1 overflow-y-auto overflow-x-hidden py-2 px-2">
+      <!-- Home -->
+      <button
+        type="button"
+        @click="navigate('/')"
+        class="flex items-center w-full rounded-[10px] mb-1 transition-colors duration-150"
+        :class="[
+          isCurrentRoute('/')
+            ? 'text-accent bg-accent-soft'
+            : 'hover:bg-surface-tertiary',
+        ]"
+        :style="{
+          justifyContent: railHovered ? 'flex-start' : 'center',
+          padding: railHovered ? '8px 12px' : '8px',
+          color: isCurrentRoute('/') ? 'var(--accent)' : 'var(--text-tertiary)',
+        }"
+        :title="!railHovered ? '首页' : undefined"
+      >
+        <HomeIcon class="h-5 w-5 shrink-0" />
+        <span
+          class="text-sm font-medium whitespace-nowrap transition-all duration-200 overflow-hidden"
+          :class="railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0'"
+        >
+          首页
+        </span>
+      </button>
+
+      <!-- Categories -->
+      <template v-for="category in toolCategories" :key="category.key">
+        <!-- Category header — 收起时仅留小间距，展开时显示文字+正常间距 -->
+        <div
+          class="text-[11px] font-semibold uppercase tracking-wider h-9 flex items-center overflow-hidden"
+          :class="railHovered ? 'px-3 pb-1 items-end' : 'justify-center'"
+          style="color: var(--text-tertiary)"
+        >
+          <span class="whitespace-nowrap transition-opacity duration-150" :class="labelFading ? 'opacity-0' : 'opacity-100'">
+            {{ railHovered ? category.label : category.shortLabel }}
+          </span>
+        </div>
+
+        <!-- Tool buttons -->
+        <button
+          v-for="item in toolsByCategory[category.key]"
+          :key="item.name"
+          type="button"
+          @click="navigate(item.path)"
+          class="flex items-center w-full rounded-[10px] mb-0.5 transition-colors duration-150"
+          :class="[
+            isCurrentRoute(item.path)
+              ? 'text-accent bg-accent-soft'
+              : 'hover:bg-surface-tertiary',
+          ]"
+          :style="{
+            justifyContent: railHovered ? 'flex-start' : 'center',
+            padding: railHovered ? '8px 12px' : '8px',
+            color: isCurrentRoute(item.path) ? 'var(--accent)' : 'var(--text-tertiary)',
+          }"
+          :title="!railHovered ? item.name : undefined"
+        >
+          <component :is="item.icon" class="h-5 w-5 shrink-0" />
+          <span
+            class="text-sm font-medium whitespace-nowrap transition-all duration-200 overflow-hidden"
+            :class="railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0'"
+          >
+            {{ item.name }}
+          </span>
+        </button>
+      </template>
+
+      <!-- More tools -->
+      <button
+        type="button"
+        @click="navigate('/more')"
+        class="flex items-center w-full rounded-[10px] mt-2 mb-1 transition-colors duration-150"
+        :class="[
+          isCurrentRoute('/more')
+            ? 'text-accent bg-accent-soft'
+            : 'hover:bg-surface-tertiary',
+        ]"
+        :style="{
+          justifyContent: railHovered ? 'flex-start' : 'center',
+          padding: railHovered ? '8px 12px' : '8px',
+          color: isCurrentRoute('/more') ? 'var(--accent)' : 'var(--text-tertiary)',
+        }"
+        :title="!railHovered ? '更多工具' : undefined"
+      >
+        <EllipsisHorizontalCircleIcon class="h-5 w-5 shrink-0" />
+        <span
+          class="text-sm font-medium whitespace-nowrap transition-all duration-200 overflow-hidden"
+          :class="railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0'"
+        >
+          更多工具
+        </span>
+      </button>
+    </nav>
+
+    <!-- Dark mode toggle (bottom) -->
+    <div class="shrink-0 px-2 py-3 border-t" style="border-color: var(--border)">
+      <button
+        type="button"
+        @click="toggleDark"
+        class="flex items-center w-full rounded-[10px] transition-colors duration-150 hover:bg-surface-tertiary"
+        :style="{
+          justifyContent: railHovered ? 'flex-start' : 'center',
+          padding: railHovered ? '8px 12px' : '8px',
+          color: 'var(--text-tertiary)',
+        }"
+        :title="!railHovered ? (isDark ? '浅色模式' : '深色模式') : undefined"
+      >
+        <SunIcon v-if="isDark" class="h-5 w-5 shrink-0" />
+        <MoonIcon v-else class="h-5 w-5 shrink-0" />
+        <span
+          class="text-sm font-medium whitespace-nowrap transition-all duration-200 overflow-hidden"
+          :class="railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0'"
+        >
+          {{ isDark ? '浅色模式' : '深色模式' }}
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== MOBILE MODE ===== -->
+  <template v-if="mode === 'mobile'">
+    <!-- Top bar -->
+    <div
+      class="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-4 border-b lg:hidden"
+      style="height: var(--topbar-height); background-color: var(--bg-primary); border-color: var(--border)"
+    >
+      <!-- Hamburger -->
+      <button
+        type="button"
+        class="p-2 -ml-2 rounded-lg transition-colors"
+        style="color: var(--text-secondary)"
+        @click="drawerOpen = true"
+      >
+        <span class="sr-only">打开导航</span>
+        <Bars3Icon class="h-5 w-5" />
+      </button>
+
+      <!-- Logo + Title -->
+      <div class="flex items-center absolute left-1/2 -translate-x-1/2">
+        <img src="/favicon.svg" alt="Logo" class="h-6 w-6" />
+        <span class="ml-2 text-sm font-semibold" style="color: var(--text-primary)">ToolKit</span>
+      </div>
+
+      <!-- Dark mode toggle -->
+      <button
+        type="button"
+        class="p-2 -mr-2 rounded-lg transition-colors"
+        style="color: var(--text-secondary)"
+        @click="toggleDark"
+      >
+        <SunIcon v-if="isDark" class="h-5 w-5" />
+        <MoonIcon v-else class="h-5 w-5" />
+      </button>
+    </div>
+
+    <!-- Drawer -->
+    <TransitionRoot as="template" :show="drawerOpen">
+      <Dialog as="div" class="relative z-50" @close="drawerOpen = false">
+        <!-- Backdrop -->
         <TransitionChild
           as="template"
           enter="transition-opacity ease-linear duration-300"
@@ -27,9 +252,10 @@ const isCurrentRoute = (path: string) => route.path === path
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 bg-gray-900/80" />
+          <div class="fixed inset-0" style="background: rgba(0,0,0,0.5)" />
         </TransitionChild>
 
+        <!-- Drawer panel -->
         <div class="fixed inset-0 flex">
           <TransitionChild
             as="template"
@@ -40,137 +266,90 @@ const isCurrentRoute = (path: string) => route.path === path
             leave-from="translate-x-0"
             leave-to="-translate-x-full"
           >
-            <DialogPanel class="relative mr-16 flex w-full max-w-xs flex-1">
-              <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
+            <DialogPanel
+              class="relative flex flex-col w-72 max-w-[80vw] h-full overflow-hidden"
+              style="background-color: var(--bg-primary)"
+            >
+              <!-- Drawer header -->
+              <div class="flex items-center justify-between px-5 h-14 shrink-0 border-b" style="border-color: var(--border)">
+                <div class="flex items-center">
+                  <img src="/favicon.svg" alt="Logo" class="h-6 w-6" />
+                  <span class="ml-2 text-sm font-semibold" style="color: var(--text-primary)">ToolKit</span>
+                </div>
                 <button
                   type="button"
-                  class="-m-2.5 p-2.5"
-                  @click="sidebarOpen = false"
+                  class="p-1.5 rounded-lg transition-colors"
+                  style="color: var(--text-tertiary)"
+                  @click="drawerOpen = false"
                 >
-                  <span class="sr-only">关闭侧边栏</span>
-                  <XMarkIcon class="h-6 w-6 text-white" aria-hidden="true" />
+                  <XMarkIcon class="h-5 w-5" />
                 </button>
               </div>
 
-              <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
-                <div class="flex h-16 shrink-0 items-center">
-                  <div class="flex flex-shrink-0 items-center">
-                    <img src="/favicon.svg" alt="ToolKit Logo" class="h-7 w-7" />
-                    <h1 
-                      @click="router.push('/')"
-                      class="ml-2 text-lg font-semibold text-gray-900 cursor-pointer hover:text-indigo-600"
-                    >
-                      ToolKit
-                    </h1>
-                  </div>
-                </div>
-                <nav class="flex flex-1 flex-col">
-                  <ul role="list" class="flex flex-1 flex-col gap-y-7">
-                    <li>
-                      <ul role="list" class="-mx-2 space-y-1">
-                        <li v-for="item in navigation" :key="item.name">
-                          <button
-                            type="button"
-                            @click="router.push(item.path)"
-                            :class="[
-                              isCurrentRoute(item.path)
-                                ? 'bg-gray-50 text-indigo-600'
-                                : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                              'group flex w-full gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                            ]"
-                          >
-                            <component
-                              :is="item.icon"
-                              :class="[
-                                isCurrentRoute(item.path)
-                                  ? 'text-indigo-600'
-                                  : 'text-gray-400 group-hover:text-indigo-600',
-                                'h-6 w-6 shrink-0',
-                              ]"
-                              aria-hidden="true"
-                            />
-                            {{ item.name }}
-                          </button>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
+              <!-- Drawer content -->
+              <nav class="flex-1 overflow-y-auto py-3 px-3">
+                <!-- Home -->
+                <button
+                  type="button"
+                  @click="navigate('/')"
+                  class="flex items-center w-full gap-3 rounded-[10px] px-3 py-2 mb-1 text-sm font-medium transition-colors"
+                  :class="[
+                    isCurrentRoute('/')
+                      ? 'bg-accent-soft'
+                      : 'hover:bg-surface-tertiary',
+                  ]"
+                  :style="{ color: isCurrentRoute('/') ? 'var(--accent)' : 'var(--text-primary)' }"
+                >
+                  <HomeIcon class="h-5 w-5 shrink-0" style="color: inherit" />
+                  首页
+                </button>
+
+                <!-- Categories -->
+                <template v-for="category in toolCategories" :key="category.key">
+                  <p
+                    class="px-3 pt-5 pb-1 text-xs font-semibold uppercase tracking-wider"
+                    style="color: var(--text-tertiary)"
+                  >
+                    {{ category.label }}
+                  </p>
+                  <button
+                    v-for="item in toolsByCategory[category.key]"
+                    :key="item.name"
+                    type="button"
+                    @click="navigate(item.path)"
+                    class="flex items-center w-full gap-3 rounded-[10px] px-3 py-2 mb-0.5 text-sm font-medium transition-colors"
+                    :class="[
+                      isCurrentRoute(item.path)
+                        ? 'bg-accent-soft'
+                        : 'hover:bg-surface-tertiary',
+                    ]"
+                    :style="{ color: isCurrentRoute(item.path) ? 'var(--accent)' : 'var(--text-primary)' }"
+                  >
+                    <component :is="item.icon" class="h-5 w-5 shrink-0" style="color: inherit" />
+                    {{ item.name }}
+                  </button>
+                </template>
+
+                <!-- More tools -->
+                <button
+                  type="button"
+                  @click="navigate('/more')"
+                  class="flex items-center w-full gap-3 rounded-[10px] px-3 py-2 mt-3 mb-1 text-sm font-medium transition-colors"
+                  :class="[
+                    isCurrentRoute('/more')
+                      ? 'bg-accent-soft'
+                      : 'hover:bg-surface-tertiary',
+                  ]"
+                  :style="{ color: isCurrentRoute('/more') ? 'var(--accent)' : 'var(--text-primary)' }"
+                >
+                  <EllipsisHorizontalCircleIcon class="h-5 w-5 shrink-0" style="color: inherit" />
+                  更多工具
+                </button>
+              </nav>
             </DialogPanel>
           </TransitionChild>
         </div>
       </Dialog>
     </TransitionRoot>
-
-    <!-- 桌面端侧边栏 -->
-    <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
-      <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
-        <div class="flex h-16 shrink-0 items-center">
-          <div class="flex flex-shrink-0 items-center">
-            <img src="/favicon.svg" alt="ToolKit Logo" class="h-7 w-7" />
-            <h1 
-              @click="router.push('/')"
-              class="ml-2 text-lg font-semibold text-gray-900 cursor-pointer hover:text-indigo-600"
-            >
-              ToolKit
-            </h1>
-          </div>
-        </div>
-        <nav class="flex flex-1 flex-col">
-          <ul role="list" class="flex flex-1 flex-col gap-y-7">
-            <li>
-              <ul role="list" class="-mx-2 space-y-1">
-                <li v-for="item in navigation" :key="item.name">
-                  <button
-                    type="button"
-                    @click="router.push(item.path)"
-                    :class="[
-                      isCurrentRoute(item.path)
-                        ? 'bg-gray-50 text-indigo-600'
-                        : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                      'group flex w-full gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                    ]"
-                  >
-                    <component
-                      :is="item.icon"
-                      :class="[
-                        isCurrentRoute(item.path)
-                          ? 'text-indigo-600'
-                          : 'text-gray-400 group-hover:text-indigo-600',
-                        'h-6 w-6 shrink-0',
-                      ]"
-                      aria-hidden="true"
-                    />
-                    {{ item.name }}
-                  </button>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-
-    <!-- 移动端顶部栏 -->
-    <div class="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden">
-      <button
-        type="button"
-        class="-m-2.5 p-2.5 text-gray-700 lg:hidden"
-        @click="sidebarOpen = true"
-      >
-        <span class="sr-only">打开侧边栏</span>
-        <Bars3Icon class="h-6 w-6" aria-hidden="true" />
-      </button>
-      <div class="flex items-center flex-1">
-        <img src="/favicon.svg" alt="ToolKit Logo" class="h-6 w-6" />
-        <h1 
-          @click="router.push('/')"
-          class="ml-2 text-lg font-semibold text-gray-900 cursor-pointer hover:text-indigo-600"
-        >
-          ToolKit
-        </h1>
-      </div>
-    </div>
-  </div>
-</template> 
+  </template>
+</template>

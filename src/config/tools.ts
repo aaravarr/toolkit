@@ -1,4 +1,4 @@
-import { 
+import {
   TableCellsIcon,
   ClockIcon,
   CodeBracketIcon,
@@ -14,8 +14,13 @@ import {
   DocumentDuplicateIcon,
   PlusIcon,
   CodeBracketSquareIcon,
-  LinkIcon
+  LinkIcon,
+  ArrowsRightLeftIcon,
+  FingerPrintIcon
 } from '@heroicons/vue/24/outline'
+
+// 工具分类类型
+export type ToolCategory = 'text' | 'data' | 'dev'
 
 // 工具类型定义
 export interface Tool {
@@ -24,7 +29,15 @@ export interface Tool {
   path: string
   icon: any
   status?: string
+  category?: ToolCategory
 }
+
+// 工具分类配置
+export const toolCategories: { key: ToolCategory; label: string; shortLabel: string }[] = [
+  { key: 'text', label: '文本工具', shortLabel: '文本' },
+  { key: 'data', label: '数据工具', shortLabel: '数据' },
+  { key: 'dev', label: '开发工具', shortLabel: '开发' },
+]
 
 // 已实现的工具列表
 export const implementedTools: Tool[] = [
@@ -32,55 +45,78 @@ export const implementedTools: Tool[] = [
     name: 'JSON表格',
     description: '将JSON数据转换为表格形式展示',
     path: '/json-to-table',
-    icon: TableCellsIcon
-  },
-  {
-    name: '时间戳工具',
-    description: '时间戳转换、时区转换等功能',
-    path: '/timestamp',
-    icon: ClockIcon
-  },
-  {
-    name: '编码转换',
-    description: '支持多种编码格式的转换工具',
-    path: '/encoding',
-    icon: CodeBracketIcon
-  },
-  {
-    name: 'IP地址查询',
-    description: '查询当前IP地址的详细信息',
-    path: '/ip-lookup',
-    icon: GlobeAltIcon
-  },
-  {
-    name: '颜色工具',
-    description: '颜色选择器、调色板、CSS渐变生成器',
-    path: '/color-tools',
-    icon: SwatchIcon
+    icon: TableCellsIcon,
+    category: 'text'
   },
   {
     name: '文档分割',
     description: '支持多种分隔符的文本分割与合并工具',
     path: '/document-splitter',
-    icon: DocumentTextIcon
+    icon: DocumentTextIcon,
+    category: 'text'
   },
   {
-    name: 'HTML预览',
-    description: '实时预览HTML代码效果',
-    path: '/html-preview',
-    icon: CodeBracketSquareIcon
+    name: '文本对比',
+    description: '代码Diff对比，支持分屏与行内字符高亮',
+    path: '/diff',
+    icon: ArrowsRightLeftIcon,
+    category: 'text'
+  },
+  {
+    name: '时间戳工具',
+    description: '时间戳转换、时区转换等功能',
+    path: '/timestamp',
+    icon: ClockIcon,
+    category: 'data'
+  },
+  {
+    name: '编码转换',
+    description: '支持多种编码格式的转换工具',
+    path: '/encoding',
+    icon: CodeBracketIcon,
+    category: 'data'
   },
   {
     name: 'CSV工具',
     description: '支持CSV文件的导入、预览和编辑',
     path: '/csv-tool',
-    icon: TableCellsIcon
+    icon: TableCellsIcon,
+    category: 'data'
   },
   {
     name: 'URL参数解析',
     description: '解析与构建URL查询参数',
     path: '/url-params',
-    icon: LinkIcon
+    icon: LinkIcon,
+    category: 'data'
+  },
+  {
+    name: 'IP地址查询',
+    description: '查询当前IP地址的详细信息',
+    path: '/ip-lookup',
+    icon: GlobeAltIcon,
+    category: 'dev'
+  },
+  {
+    name: '颜色工具',
+    description: '颜色选择器、调色板、CSS渐变生成器',
+    path: '/color-tools',
+    icon: SwatchIcon,
+    category: 'dev'
+  },
+  {
+    name: 'HTML预览',
+    description: '实时预览HTML代码效果',
+    path: '/html-preview',
+    icon: CodeBracketSquareIcon,
+    category: 'dev'
+  },
+  {
+    name: '身份证信息',
+    description: '提取身份证中的地区、年龄、性别等信息',
+    path: '/id-card',
+    icon: FingerPrintIcon,
+    category: 'dev'
   }
 ]
 

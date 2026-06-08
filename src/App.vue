@@ -3,14 +3,23 @@ import Navigation from './views/Navigation.vue'
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100">
-    <Navigation />
-    <div class="lg:pl-64">
-      <main class="py-6">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <router-view></router-view>
-        </div>
-      </main>
-    </div>
+  <!-- Desktop: icon rail + content -->
+  <div class="hidden lg:flex min-h-screen bg-surface-secondary">
+    <Navigation mode="rail" />
+    <main class="flex-1 ml-16">
+      <div class="p-6 lg:p-8">
+        <router-view />
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile: top bar + content -->
+  <div class="lg:hidden min-h-screen bg-surface-secondary">
+    <Navigation mode="mobile" />
+    <main class="pt-14">
+      <div class="p-4">
+        <router-view />
+      </div>
+    </main>
   </div>
 </template>

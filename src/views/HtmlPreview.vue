@@ -1,47 +1,34 @@
 <template>
-  <div class="space-y-6">
-    <div class="bg-white shadow sm:rounded-lg">
-      <div class="px-4 py-5 sm:p-6">
-        <h3 class="text-base font-semibold leading-6 text-gray-900">HTML 预览</h3>
-        <div class="mt-2 max-w-xl text-sm text-gray-500">
-          <p>实时预览 HTML 代码效果</p>
-        </div>
-        <div class="mt-5">
-          <div class="flex flex-col lg:flex-row gap-6">
-            <div class="flex-1">
-              <label for="html-input" class="block text-sm font-medium text-gray-700">HTML 代码</label>
-              <div class="mt-1 relative rounded-md shadow-sm">
-                <textarea
-                  id="html-input"
-                  v-model="htmlCode"
-                  class="block w-full rounded-md border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white [&:not(:focus)]:bg-white font-mono h-[calc(100vh-12.5rem)]"
-                  placeholder="输入HTML代码..."
-                  @input="updatePreview"
-                ></textarea>
-              </div>
-            </div>
-            <div class="flex-1">
-              <label class="block text-sm font-medium text-gray-700">预览效果</label>
-              <div class="mt-1 relative rounded-md shadow-sm">
-                <div class="overflow-hidden rounded-md border border-gray-200 bg-white">
-                  <iframe
-                    ref="previewFrame"
-                    class="w-full h-[calc(100vh-12.5rem)] border-0"
-                    sandbox="allow-scripts allow-same-origin allow-modals allow-forms allow-popups"
-                    @load="updatePreview"
-                  ></iframe>
-                </div>
-              </div>
-            </div>
-          </div>
+  <ToolCard title="HTML 预览" description="实时预览 HTML 代码效果">
+    <div class="flex flex-col lg:flex-row gap-6">
+      <div class="flex-1">
+        <label for="html-input" class="label-text">HTML 代码</label>
+        <textarea
+          id="html-input"
+          v-model="htmlCode"
+          class="textarea-field font-mono h-[calc(100vh-12.5rem)]"
+          placeholder="输入HTML代码..."
+          @input="updatePreview"
+        ></textarea>
+      </div>
+      <div class="flex-1">
+        <label class="label-text">预览效果</label>
+        <div class="overflow-hidden rounded-md border border-line bg-surface-primary">
+          <iframe
+            ref="previewFrame"
+            class="w-full h-[calc(100vh-12.5rem)] border-0"
+            sandbox="allow-scripts allow-same-origin allow-modals allow-forms allow-popups"
+            @load="updatePreview"
+          ></iframe>
         </div>
       </div>
     </div>
-  </div>
+  </ToolCard>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
+import ToolCard from '../components/ToolCard.vue'
 
 const htmlCode = ref('')
 const previewFrame = ref<HTMLIFrameElement | null>(null)
@@ -95,4 +82,4 @@ onMounted(() => {
 textarea {
   resize: none;
 }
-</style> 
+</style>

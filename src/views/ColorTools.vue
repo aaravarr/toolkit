@@ -1,232 +1,180 @@
 <template>
-  <div class="space-y-6">
-    <div class="bg-white shadow sm:rounded-lg">
-      <div class="px-4 py-5 sm:p-6">
-        <h3 class="text-base font-semibold leading-6 text-gray-900">调色板</h3>
-        <div class="mt-2 max-w-xl text-sm text-gray-500">
-          <p>使用调色板选择颜色，支持十六进制、RGB和HSL格式的转换</p>
+  <ToolCard title="调色板" description="使用调色板选择颜色，支持十六进制、RGB和HSL格式的转换">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-5">
+      <!-- 左侧：颜色选择器 -->
+      <div class="lg:col-span-2 flex items-center justify-center">
+        <div class="w-full max-w-[320px]">
+          <ColorPicker v-model="selectedColor" />
         </div>
-        <div class="mt-5">
-          <div class="grid grid-cols-1 gap-6 lg:grid-cols-5">
-            <!-- 左侧：颜色选择器 -->
-            <div class="lg:col-span-2 flex items-center justify-center">
-              <div class="w-full max-w-[320px]">
-                <ColorPicker v-model="selectedColor" />
+      </div>
+
+      <!-- 右侧：颜色值和预览 -->
+      <div class="lg:col-span-3 space-y-6">
+        <!-- 颜色值显示 -->
+        <div class="space-y-4">
+          <div>
+            <label class="label-text">十六进制</label>
+            <div class="mt-1 relative rounded-md shadow-sm">
+              <input
+                type="text"
+                v-model="hexColor"
+                class="input-field pr-16"
+                @input="handleHexInput"
+              />
+              <div class="absolute inset-y-0 right-0 flex items-center pr-1">
+                <CopyButton :text="hexColor" label="" size="sm" />
               </div>
             </div>
-
-            <!-- 右侧：颜色值和预览 -->
-            <div class="lg:col-span-3 space-y-6">
-              <!-- 颜色值显示 -->
-              <div class="space-y-4">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">十六进制</label>
-                  <div class="mt-1 relative rounded-md shadow-sm">
-                    <input
-                      type="text"
-                      v-model="hexColor"
-                      class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
-                      @input="handleHexInput"
-                    />
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                      <button 
-                        @click="copyColor(hexColor)"
-                        class="text-indigo-600 hover:text-indigo-500"
-                      >
-                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-                          <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">RGB</label>
-                  <div class="mt-1 relative rounded-md shadow-sm">
-                    <input
-                      type="text"
-                      v-model="rgbColor"
-                      class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
-                      @input="handleRgbInput"
-                    />
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                      <button 
-                        @click="copyColor(rgbColor)"
-                        class="text-indigo-600 hover:text-indigo-500"
-                      >
-                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-                          <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">HSL</label>
-                  <div class="mt-1 relative rounded-md shadow-sm">
-                    <input
-                      type="text"
-                      v-model="hslColor"
-                      class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
-                      @input="handleHslInput"
-                    />
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                      <button 
-                        @click="copyColor(hslColor)"
-                        class="text-indigo-600 hover:text-indigo-500"
-                      >
-                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-                          <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+          </div>
+          <div>
+            <label class="label-text">RGB</label>
+            <div class="mt-1 relative rounded-md shadow-sm">
+              <input
+                type="text"
+                v-model="rgbColor"
+                class="input-field pr-16"
+                @input="handleRgbInput"
+              />
+              <div class="absolute inset-y-0 right-0 flex items-center pr-1">
+                <CopyButton :text="rgbColor" label="" size="sm" />
               </div>
-
-              <!-- 颜色预览 -->
-              <div class="flex flex-col items-center justify-center p-6 border border-gray-200 rounded-lg">
-                <div 
-                  class="w-full h-48 rounded-lg mb-4 transition-colors duration-200"
-                  :style="{ backgroundColor: hexColor }"
-                ></div>
-                <div class="text-center">
-                  <p class="text-sm text-gray-500">当前颜色</p>
-                  <p class="text-lg font-mono mt-1">{{ hexColor }}</p>
-                  <button 
-                    @click="copyColor(hexColor)"
-                    class="mt-2 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    复制颜色
-                  </button>
-                </div>
+            </div>
+          </div>
+          <div>
+            <label class="label-text">HSL</label>
+            <div class="mt-1 relative rounded-md shadow-sm">
+              <input
+                type="text"
+                v-model="hslColor"
+                class="input-field pr-16"
+                @input="handleHslInput"
+              />
+              <div class="absolute inset-y-0 right-0 flex items-center pr-1">
+                <CopyButton :text="hslColor" label="" size="sm" />
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 颜色预览 -->
+        <div class="flex flex-col items-center justify-center p-6 border border-line rounded-lg">
+          <div
+            class="w-full h-48 rounded-lg mb-4 transition-colors duration-200"
+            :style="{ backgroundColor: hexColor }"
+          ></div>
+          <div class="text-center">
+            <p class="text-sm text-content-secondary">当前颜色</p>
+            <p class="text-lg font-mono mt-1">{{ hexColor }}</p>
+            <div class="mt-2">
+              <CopyButton :text="hexColor" label="复制颜色" />
             </div>
           </div>
         </div>
       </div>
     </div>
+  </ToolCard>
 
-    <!-- 渐变色生成工具 -->
-    <div class="bg-white shadow sm:rounded-lg">
-      <div class="px-4 py-5 sm:p-6">
-        <h3 class="text-base font-semibold leading-6 text-gray-900">渐变色生成工具</h3>
-        <div class="mt-2 max-w-xl text-sm text-gray-500">
-          <p>添加多个颜色点，设置位置和角度，生成CSS渐变色代码</p>
-        </div>
-        <div class="mt-5">
-          <div class="space-y-6">
-            <!-- 颜色列表 -->
-            <div class="space-y-4">
-              <div v-for="(color, index) in gradientColors" :key="index" class="flex items-center space-x-4">
-                <div class="flex-1">
-                  <label class="block text-sm font-medium text-gray-700 mb-1">颜色选择</label>
-                  <input
-                    type="color"
-                    :value="getOpaqueColor(color.value)"
-                    @input="updateColorValue(index, $event)"
-                    class="w-12 h-12 rounded cursor-pointer"
-                  />
-                </div>
-                <div class="flex-1">
-                  <label class="block text-sm font-medium text-gray-700 mb-1">颜色值</label>
-                  <input
-                    type="text"
-                    v-model="color.value"
-                    class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
-                    placeholder="#RRGGBBAA 或 rgba(r,g,b,a)"
-                  />
-                </div>
-                <div class="flex-1">
-                  <label class="block text-sm font-medium text-gray-700 mb-1">位置 (%)</label>
-                  <input
-                    type="number"
-                    v-model="color.stop"
-                    min="0"
-                    max="100"
-                    class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
-                  />
-                </div>
-                <div class="flex items-end">
-                  <button
-                    @click="removeColor(index)"
-                    class="text-red-600 hover:text-red-500"
-                    title="删除此颜色点"
-                  >
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- 添加颜色按钮 -->
+  <ToolCard title="渐变色生成工具" description="添加多个颜色点，设置位置和角度，生成CSS渐变色代码">
+    <div class="space-y-6">
+      <!-- 颜色列表 -->
+      <div class="space-y-4">
+        <div v-for="(color, index) in gradientColors" :key="index" class="flex items-center space-x-4">
+          <div class="flex-1">
+            <label class="label-text">颜色选择</label>
+            <input
+              type="color"
+              :value="getOpaqueColor(color.value)"
+              @input="updateColorValue(index, $event)"
+              class="w-12 h-12 rounded cursor-pointer"
+            />
+          </div>
+          <div class="flex-1">
+            <label class="label-text">颜色值</label>
+            <input
+              type="text"
+              v-model="color.value"
+              class="input-field"
+              placeholder="#RRGGBBAA 或 rgba(r,g,b,a)"
+            />
+          </div>
+          <div class="flex-1">
+            <label class="label-text">位置 (%)</label>
+            <input
+              type="number"
+              v-model="color.stop"
+              min="0"
+              max="100"
+              class="input-field"
+            />
+          </div>
+          <div class="flex items-end">
             <button
-              @click="addColor"
-              class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              @click="removeColor(index)"
+              class="text-red-600 hover:text-red-500 cursor-pointer"
+              title="删除此颜色点"
             >
-              添加颜色
+              <TrashIcon class="h-5 w-5" />
             </button>
+          </div>
+        </div>
+      </div>
 
-            <!-- 角度选择 -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700">旋转角度</label>
-              <div class="mt-1">
-                <input
-                  type="range"
-                  v-model="gradientAngle"
-                  min="0"
-                  max="360"
-                  class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
-                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>0°</span>
-                  <span>{{ gradientAngle }}°</span>
-                  <span>360°</span>
-                </div>
-              </div>
-            </div>
+      <!-- 添加颜色按钮 -->
+      <button
+        @click="addColor"
+        class="btn-primary"
+      >
+        添加颜色
+      </button>
 
-            <!-- 预览和代码 -->
-            <div class="space-y-4">
-              <div class="h-32 rounded-lg" :style="gradientStyle"></div>
-              <div class="relative">
-                <textarea
-                  v-model="gradientCode"
-                  class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white font-mono"
-                  rows="3"
-                  readonly
-                ></textarea>
-                <button
-                  @click="copyGradientCode"
-                  class="absolute top-2 right-2 text-indigo-600 hover:text-indigo-500"
-                >
-                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-                    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+      <!-- 角度选择 -->
+      <div>
+        <label class="label-text">旋转角度</label>
+        <div class="mt-1">
+          <input
+            type="range"
+            v-model="gradientAngle"
+            min="0"
+            max="360"
+            class="w-full h-2 bg-surface-tertiary rounded-lg appearance-none cursor-pointer"
+          />
+          <div class="flex justify-between text-xs text-content-secondary mt-1">
+            <span>0°</span>
+            <span>{{ gradientAngle }}°</span>
+            <span>360°</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 预览和代码 -->
+      <div class="space-y-4">
+        <div class="h-32 rounded-lg" :style="gradientStyle"></div>
+        <div class="relative">
+          <textarea
+            v-model="gradientCode"
+            class="textarea-field font-mono"
+            rows="3"
+            readonly
+          ></textarea>
+          <div class="absolute top-2 right-2">
+            <CopyButton :text="gradientCode" label="" size="sm" />
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </ToolCard>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { parseToRgba, parseToHsla } from 'color2k'
+import { TrashIcon } from '@heroicons/vue/24/outline'
 import ColorPicker from '../components/ColorPicker.vue'
+import ToolCard from '../components/ToolCard.vue'
+import CopyButton from '../components/CopyButton.vue'
 
 // 颜色选择器相关
 const selectedColor = ref('#4F46E5ff')
-const copySuccess = ref(false)
 
 // 渐变色相关
 const gradientColors = ref([
@@ -276,20 +224,6 @@ const gradientCode = computed(() => {
     .join(', ')
   return `background: linear-gradient(${gradientAngle.value}deg, ${stops});`
 })
-
-// 复制渐变色代码
-const copyGradientCode = () => {
-  navigator.clipboard.writeText(gradientCode.value)
-}
-
-// 复制颜色值
-const copyColor = (color: string) => {
-  navigator.clipboard.writeText(color)
-  copySuccess.value = true
-  setTimeout(() => {
-    copySuccess.value = false
-  }, 2000)
-}
 
 // 辅助函数：验证颜色值
 const isValidColor = (color: string): boolean => {
@@ -344,7 +278,7 @@ const hslColor = computed(() => {
 const handleHexInput = (event: Event) => {
   const input = event.target as HTMLInputElement
   const value = input.value.trim()
-  
+
   // 检查是否是有效的十六进制颜色
   if (/^#?([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(value)) {
     let hex = value
@@ -354,7 +288,7 @@ const handleHexInput = (event: Event) => {
     if (hex.length === 7) {
       hex = hex + 'ff'
     }
-    
+
     if (isValidColor(hex)) {
       selectedColor.value = hex
     }
@@ -410,7 +344,7 @@ const updateColorValue = (index: number, event: Event) => {
   const input = event.target as HTMLInputElement
   const newColor = input.value
   const currentColor = gradientColors.value[index].value
-  
+
   try {
     const [, , , a] = parseToRgba(currentColor)
     gradientColors.value[index].value = `rgba(${parseInt(newColor.slice(1, 3), 16)}, ${parseInt(newColor.slice(3, 5), 16)}, ${parseInt(newColor.slice(5, 7), 16)}, ${a})`
@@ -418,4 +352,4 @@ const updateColorValue = (index: number, event: Event) => {
     gradientColors.value[index].value = newColor
   }
 }
-</script> 
+</script>
