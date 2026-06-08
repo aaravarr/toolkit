@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+      // iOS Safari: 移动端禁止输入框自动缩放
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        const vp = document.querySelector('meta[name="viewport"]')
+        if (vp) vp.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1')
+      }
+    </script>
     <title>X-Utils - 实用在线工具箱</title>
     <meta name="description" content="X-Utils 提供免费在线开发工具集合：JSON表格转换、时间戳工具、编码转换、文本对比Diff、CSV工具、颜色选择器、HTML预览、IP查询、身份证信息提取等。">
     <meta name="keywords" content="在线工具,开发工具,JSON,时间戳,Base64,编码转换,文本对比,Diff,CSV,HTML预览,IP查询,身份证,前端工具">
