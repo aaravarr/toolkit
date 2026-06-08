@@ -9,7 +9,7 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('../views/HomeView.vue'),
-      meta: { title: '实用在线工具箱', description: '免费在线开发工具集合：JSON表格、时间戳、编码转换、文本对比、CSV、颜色工具、HTML预览等。' }
+      meta: { title: '实用在线工具箱', description: '免费在线开发工具集合：JSON格式化、时间戳、编码转换、文本对比、CSV、颜色工具、HTML预览等。' }
     },
     {
       path: '/json-formatter',
