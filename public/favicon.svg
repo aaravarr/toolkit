@@ -1,13 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- 背景圆形 -->
-  <circle cx="16" cy="16" r="15" fill="#4F46E5" />
-  
-  <!-- 中心图形 -->
-  <path d="M16 8L24 12V20L16 24L8 20V12L16 8Z" fill="white" />
-  
-  <!-- 装饰线条 -->
-  <path d="M16 8V24" stroke="#4F46E5" stroke-width="2" />
-  <path d="M8 12L24 20" stroke="#4F46E5" stroke-width="2" />
-  <path d="M24 12L8 20" stroke="#4F46E5" stroke-width="2" />
-</svg> 
+<svg width="32" height="32" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 蓝粗黑细：电光蓝粗主笔 / 墨黑细副笔 -->
+  <path d="M224 190 L350 190 L800 834 L674 834 Z" fill="#141414"/>
+  <path d="M632 190 L842 190 L392 834 L182 834 Z" fill="#3A5FFF"/>
+</svg>
