@@ -18,10 +18,15 @@ import {
   Link,
   ArrowLeftRight,
   Fingerprint,
+  Binary,
+  KeyRound,
+  Hash,
+  QrCode,
+  Timer,
 } from 'lucide-vue-next'
 
 // 工具分类类型
-export type ToolCategory = 'text' | 'data' | 'dev'
+export type ToolCategory = 'text' | 'convert' | 'crypto' | 'generate' | 'dev' | 'utility'
 
 // 工具类型定义
 export interface Tool {
@@ -35,17 +40,20 @@ export interface Tool {
 
 // 工具分类配置
 export const toolCategories: { key: ToolCategory; label: string; shortLabel: string }[] = [
-  { key: 'text', label: '文本工具', shortLabel: '文本' },
-  { key: 'data', label: '数据工具', shortLabel: '数据' },
-  { key: 'dev', label: '开发工具', shortLabel: '开发' },
+  { key: 'text', label: '文本处理', shortLabel: '文本' },
+  { key: 'convert', label: '数据转换', shortLabel: '转换' },
+  { key: 'crypto', label: '编码加密', shortLabel: '加密' },
+  { key: 'generate', label: '生成工具', shortLabel: '生成' },
+  { key: 'dev', label: '开发辅助', shortLabel: '开发' },
+  { key: 'utility', label: '实用工具', shortLabel: '实用' },
 ]
 
 // 已实现的工具列表
 export const implementedTools: Tool[] = [
   {
-    name: 'JSON表格',
-    description: '将JSON数据转换为表格形式展示',
-    path: '/json-to-table',
+    name: 'JSON格式化',
+    description: 'JSON美化、压缩、树形视图、表格视图、语法校验',
+    path: '/json-formatter',
     icon: Braces,
     category: 'text'
   },
@@ -68,28 +76,28 @@ export const implementedTools: Tool[] = [
     description: '时间戳转换、时区转换等功能',
     path: '/timestamp',
     icon: Clock,
-    category: 'data'
+    category: 'convert'
   },
   {
     name: '编码转换',
     description: '支持多种编码格式的转换工具',
     path: '/encoding',
     icon: Code2,
-    category: 'data'
+    category: 'convert'
   },
   {
     name: 'CSV工具',
     description: '支持CSV文件的导入、预览和编辑',
     path: '/csv-tool',
     icon: Table2,
-    category: 'data'
+    category: 'convert'
   },
   {
     name: 'URL参数解析',
     description: '解析与构建URL查询参数',
     path: '/url-params',
     icon: Link,
-    category: 'data'
+    category: 'convert'
   },
   {
     name: 'IP地址查询',
@@ -103,7 +111,7 @@ export const implementedTools: Tool[] = [
     description: '颜色选择器、调色板、CSS渐变生成器',
     path: '/color-tools',
     icon: Palette,
-    category: 'dev'
+    category: 'utility'
   },
   {
     name: 'HTML预览',
@@ -117,6 +125,48 @@ export const implementedTools: Tool[] = [
     description: '提取身份证中的地区、年龄、性别等信息',
     path: '/id-card',
     icon: Fingerprint,
+    category: 'utility'
+  },
+  {
+    name: 'UUID 生成器',
+    description: '批量生成 UUID v4，支持大小写和连字符控制',
+    path: '/uuid',
+    icon: Fingerprint,
+    category: 'generate'
+  },
+  {
+    name: '进制转换',
+    description: '二进制、八进制、十进制、十六进制及任意进制互转',
+    path: '/base-convert',
+    icon: Binary,
+    category: 'convert'
+  },
+  {
+    name: '密码生成器',
+    description: '加密安全的随机密码生成，支持自定义选项',
+    path: '/password',
+    icon: KeyRound,
+    category: 'crypto'
+  },
+  {
+    name: '哈希计算器',
+    description: 'MD5、SHA-1、SHA-256、SHA-512等哈希值计算',
+    path: '/hash',
+    icon: Hash,
+    category: 'crypto'
+  },
+  {
+    name: '二维码生成器',
+    description: '支持文本、网址、WiFi、邮箱、电话等多种内容类型',
+    path: '/qrcode',
+    icon: QrCode,
+    category: 'generate'
+  },
+  {
+    name: 'Cron生成器',
+    description: '可视化生成和解析Cron定时任务表达式',
+    path: '/cron',
+    icon: Timer,
     category: 'dev'
   }
 ]

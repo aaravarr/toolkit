@@ -12,10 +12,10 @@ const router = createRouter({
       meta: { title: '实用在线工具箱', description: '免费在线开发工具集合：JSON表格、时间戳、编码转换、文本对比、CSV、颜色工具、HTML预览等。' }
     },
     {
-      path: '/json-to-table',
-      name: 'json-to-table',
-      component: () => import('../views/JsonToTable.vue'),
-      meta: { title: 'JSON 转表格', description: '将JSON数组或对象转换为表格形式展示，支持嵌套数据的可视化浏览。' }
+      path: '/json-formatter',
+      name: 'json-formatter',
+      component: () => import('../views/JsonFormatterTool.vue'),
+      meta: { title: 'JSON 格式化', description: 'JSON美化、压缩、树形视图、表格视图、语法校验、JSONPath提取，支持文件上传。' }
     },
     {
       path: '/timestamp',
@@ -76,6 +76,42 @@ const router = createRouter({
       name: 'id-card',
       component: () => import('../views/IdCardTool.vue'),
       meta: { title: '身份证信息提取', description: '输入身份证号码，自动提取省份、年龄、性别、生肖、星座等信息，支持校验码验证。' }
+    },
+    {
+      path: '/uuid',
+      name: 'uuid',
+      component: () => import('../views/UuidTool.vue'),
+      meta: { title: 'UUID 生成器', description: '在线生成 UUID v4（随机），支持批量生成、大小写切换、连字符控制。' }
+    },
+    {
+      path: '/base-convert',
+      name: 'base-convert',
+      component: () => import('../views/BaseConvertTool.vue'),
+      meta: { title: '进制转换', description: '支持二进制、八进制、十进制、十六进制及任意 2-36 进制的实时互转工具。' }
+    },
+    {
+      path: '/password',
+      name: 'password',
+      component: () => import('../views/PasswordTool.vue'),
+      meta: { title: '密码生成器', description: '使用加密安全的随机数生成器创建高强度密码，支持自定义长度、字符类型、批量生成。' }
+    },
+    {
+      path: '/hash',
+      name: 'hash',
+      component: () => import('../views/HashTool.vue'),
+      meta: { title: '哈希计算器', description: '在线计算MD5、SHA-1、SHA-256、SHA-512等哈希值，支持HMAC模式和文件哈希。' }
+    },
+    {
+      path: '/qrcode',
+      name: 'qrcode',
+      component: () => import('../views/QrCodeTool.vue'),
+      meta: { title: '二维码生成器', description: '支持文本、网址、WiFi、邮箱、电话等多种内容类型的二维码生成，支持自定义样式和下载。' }
+    },
+    {
+      path: '/cron',
+      name: 'cron',
+      component: () => import('../views/CronTool.vue'),
+      meta: { title: 'Cron 表达式生成器', description: '可视化生成和解析 Cron 定时任务表达式，支持常用预设、人类可读描述和未来执行时间预览。' }
     },
     {
       path: '/more',

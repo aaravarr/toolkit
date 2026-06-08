@@ -38,7 +38,7 @@ const isCurrentRoute = (path: string) => route.path === path
 
 // Tools grouped by category
 const toolsByCategory = computed(() => {
-  const map: Record<ToolCategory, Tool[]> = { text: [], data: [], dev: [] }
+  const map: Record<ToolCategory, Tool[]> = { text: [], convert: [], crypto: [], generate: [], dev: [], utility: [] }
   implementedTools.forEach(tool => {
     if (tool.category) {
       map[tool.category].push(tool)

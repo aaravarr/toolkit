@@ -6,7 +6,7 @@ import Navigation from './views/Navigation.vue'
   <!-- Desktop: icon rail + content -->
   <div class="hidden lg:flex min-h-screen bg-surface-secondary">
     <Navigation mode="rail" />
-    <main class="flex-1 ml-16">
+    <main class="flex-1 ml-16 min-w-0 overflow-hidden">
       <div class="p-6 lg:p-8">
         <router-view />
       </div>
@@ -16,7 +16,7 @@ import Navigation from './views/Navigation.vue'
   <!-- Mobile: top bar + content -->
   <div class="lg:hidden min-h-screen bg-surface-secondary">
     <Navigation mode="mobile" />
-    <main class="pt-14">
+    <main class="pt-14 min-w-0 overflow-hidden">
       <div>
         <router-view />
       </div>
