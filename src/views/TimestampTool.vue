@@ -9,11 +9,11 @@ import 'dayjs/locale/zh-cn'
 import ToolCard from '../components/ToolCard.vue'
 import CopyButton from '../components/CopyButton.vue'
 import {
-  ClockIcon,
-  ArrowPathIcon,
-  CheckCircleIcon,
-  ExclamationCircleIcon,
-} from '@heroicons/vue/24/outline'
+  Clock,
+  Loader2,
+  CircleCheckBig,
+  AlertCircle,
+} from 'lucide-vue-next'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -256,7 +256,7 @@ function applyFormat(fmt: string) {
       <!-- ===== 当前时间 ===== -->
       <section>
         <h2 class="text-sm font-semibold text-content-secondary mb-3 flex items-center gap-1.5">
-          <ClockIcon class="h-4 w-4" />
+          <Clock class="h-4 w-4" />
           当前时间
         </h2>
         <div
@@ -281,7 +281,7 @@ function applyFormat(fmt: string) {
       <!-- ===== 智能解析区 ===== -->
       <section>
         <h2 class="text-sm font-semibold text-content-secondary mb-3 flex items-center gap-1.5">
-          <ArrowPathIcon class="h-4 w-4" />
+          <Loader2 class="h-4 w-4 animate-spin" />
           智能解析
         </h2>
 
@@ -301,11 +301,11 @@ function applyFormat(fmt: string) {
 
           <!-- 解析状态 -->
           <div v-if="parseSource" class="flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400">
-            <CheckCircleIcon class="h-3.5 w-3.5" />
+            <CircleCheckBig class="h-3.5 w-3.5" />
             {{ parseSource }}
           </div>
           <div v-if="parseError" class="flex items-center gap-1.5 text-xs text-red-500">
-            <ExclamationCircleIcon class="h-3.5 w-3.5" />
+            <AlertCircle class="h-3.5 w-3.5" />
             {{ parseError }}
           </div>
         </div>

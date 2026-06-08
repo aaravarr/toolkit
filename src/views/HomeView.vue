@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
+import { Search } from 'lucide-vue-next'
 import { implementedTools, toolCategories, type Tool, type ToolCategory } from '../config/tools'
 
 const router = useRouter()
@@ -47,7 +47,7 @@ function clearSearch() {
     <!-- Search -->
     <div class="mx-auto mt-8 max-w-md">
       <div class="relative">
-        <MagnifyingGlassIcon
+        <Search
           class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-content-tertiary"
         />
         <input

@@ -48,7 +48,7 @@
         </div>
         <div class="overflow-hidden rounded-lg border border-line bg-surface-primary">
           <div v-if="splitResult.length === 0" class="flex flex-col items-center justify-center py-8 px-4">
-            <DocumentDuplicateIcon class="h-10 w-10 text-content-tertiary" />
+            <Copy class="h-10 w-10 text-content-tertiary" />
             <h3 class="mt-2 text-sm font-medium text-content-primary">暂无数据</h3>
             <p class="mt-1 text-sm text-content-secondary">请输入文本</p>
           </div>
@@ -165,7 +165,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { DocumentDuplicateIcon } from '@heroicons/vue/24/outline'
+import { Copy } from 'lucide-vue-next'
 import ToolCard from '../components/ToolCard.vue'
 import CopyButton from '../components/CopyButton.vue'
 

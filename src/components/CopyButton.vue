@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ClipboardDocumentIcon, CheckIcon } from '@heroicons/vue/20/solid'
+import { Clipboard, Check } from 'lucide-vue-next'
 import { useClipboard } from '../composables/useClipboard'
 
 withDefaults(defineProps<{
@@ -29,8 +29,8 @@ const { copy, copied } = useClipboard()
     :aria-label="copied ? '已复制' : label"
     @click="copy(text)"
   >
-    <CheckIcon v-if="copied" :class="size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4'" />
-    <ClipboardDocumentIcon v-else :class="size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4'" />
+    <Check v-if="copied" :class="size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4'" />
+    <Clipboard v-else :class="size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4'" />
     <span>{{ copied ? '已复制' : label }}</span>
   </button>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ExclamationTriangleIcon } from '@heroicons/vue/20/solid'
+import { AlertTriangle } from 'lucide-vue-next'
 
 defineProps<{
   message: string
@@ -15,7 +15,7 @@ defineEmits<{
   <div class="rounded-[12px] bg-red-50 border border-red-200 p-4 dark:bg-red-900/20 dark:border-red-800">
     <div class="flex">
       <div class="flex-shrink-0">
-        <ExclamationTriangleIcon class="h-5 w-5 text-red-400 dark:text-red-500" aria-hidden="true" />
+        <AlertTriangle class="h-5 w-5 text-red-400 dark:text-red-500" aria-hidden="true" />
       </div>
       <div class="ml-3 flex-1">
         <p class="text-sm text-red-800 dark:text-red-300">{{ message }}</p>

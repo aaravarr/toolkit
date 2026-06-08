@@ -46,7 +46,7 @@
           @change="handleFileUpload"
         />
         <div class="space-y-4">
-          <ArrowUpTrayIcon class="mx-auto h-8 w-8 sm:h-12 sm:w-12 text-content-tertiary" />
+          <Upload class="mx-auto h-8 w-8 sm:h-12 sm:w-12 text-content-tertiary" />
           <p v-if="!fileName" class="text-content-secondary text-sm sm:text-base">拖拽文件到此处或点击上传</p>
           <p v-else class="text-content-secondary text-sm sm:text-base">已上传文件: {{ fileName }}</p>
           <p class="text-xs sm:text-sm text-content-secondary">支持CSV、Excel文件</p>
@@ -82,7 +82,7 @@
             class="w-full inline-flex items-center justify-center rounded-lg bg-blue-50 px-4 py-3 sm:py-4 text-sm font-semibold text-blue-600 shadow-sm ring-1 ring-inset ring-blue-200 hover:bg-blue-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             :disabled="!csvData.length"
           >
-            <ArrowDownTrayIcon class="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+            <Download class="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
             导出CSV
           </button>
           <button
@@ -90,7 +90,7 @@
             class="w-full inline-flex items-center justify-center rounded-lg bg-green-50 px-4 py-3 sm:py-4 text-sm font-semibold text-green-600 shadow-sm ring-1 ring-inset ring-green-200 hover:bg-green-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             :disabled="!csvData.length"
           >
-            <ArrowDownTrayIcon class="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+            <Download class="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
             导出Excel
           </button>
           <CopyButton :text="csvTextForCopy" label="复制到剪贴板" class="w-full !py-3 sm:!py-4" />
@@ -190,7 +190,7 @@
             :disabled="currentPage === 1"
             class="btn-secondary !p-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <ChevronLeftIcon class="h-5 w-5" />
+            <ChevronLeft class="h-5 w-5" />
           </button>
           <div class="flex items-center gap-1">
             <button
@@ -212,7 +212,7 @@
             :disabled="currentPage === totalPages"
             class="btn-secondary !p-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <ChevronRightIcon class="h-5 w-5" />
+            <ChevronRight class="h-5 w-5" />
           </button>
         </div>
         <span class="text-sm text-content-secondary">
@@ -232,13 +232,11 @@ import { ref, computed, watch, nextTick } from 'vue'
 import Papa from 'papaparse'
 import * as XLSX from 'xlsx'
 import {
-  ArrowUpTrayIcon,
-  ArrowDownTrayIcon,
-} from '@heroicons/vue/24/outline'
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from '@heroicons/vue/20/solid'
+  Upload,
+  Download,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-vue-next'
 import ToolCard from '../components/ToolCard.vue'
 import CopyButton from '../components/CopyButton.vue'
 import ErrorAlert from '../components/ErrorAlert.vue'

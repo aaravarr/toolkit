@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue'
 import ToolCard from '../components/ToolCard.vue'
 import ErrorAlert from '../components/ErrorAlert.vue'
-import { DocumentIcon, InformationCircleIcon } from '@heroicons/vue/24/outline'
+import { File, Info } from 'lucide-vue-next'
 
 const jsonInput = ref('')
 const jsonData = ref<any[]>([])
@@ -95,14 +95,14 @@ watch(jsonInput, (newValue) => {
 
       <div class="overflow-hidden rounded-lg border border-line bg-surface-primary shadow">
         <div v-if="jsonData.length === 0" class="flex flex-col items-center justify-center py-12 px-4">
-          <DocumentIcon class="h-12 w-12 text-content-tertiary" />
+          <File class="h-12 w-12 text-content-tertiary" />
           <h3 class="mt-2 text-sm font-medium text-content-primary">暂无数据</h3>
           <p class="mt-1 text-sm text-content-secondary">请输入有效的 JSON 数组来生成表格</p>
         </div>
         <div v-else>
           <div class="bg-accent-soft border-b border-line px-6 py-3 text-sm text-accent flex items-center justify-between">
             <div class="flex items-center">
-              <InformationCircleIcon class="h-5 w-5 mr-2 text-accent" />
+              <Info class="h-5 w-5 mr-2 text-accent" />
               <p>提示：双击表格中的单元格可以继续解析其中的 JSON 内容</p>
             </div>
             <button

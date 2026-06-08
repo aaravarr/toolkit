@@ -113,7 +113,7 @@
               class="text-red-600 hover:text-red-500 cursor-pointer"
               title="删除此颜色点"
             >
-              <TrashIcon class="h-5 w-5" />
+              <Trash2 class="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -168,7 +168,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { parseToRgba, parseToHsla } from 'color2k'
-import { TrashIcon } from '@heroicons/vue/24/outline'
+import { Trash2 } from 'lucide-vue-next'
 import ColorPicker from '../components/ColorPicker.vue'
 import ToolCard from '../components/ToolCard.vue'
 import CopyButton from '../components/CopyButton.vue'

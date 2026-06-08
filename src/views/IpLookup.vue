@@ -22,7 +22,7 @@
     </div>
     <ErrorAlert v-else-if="error" :message="error" :retryable="true" @retry="getIpInfo" />
     <div v-else class="text-center py-4">
-      <ArrowPathIcon class="mx-auto h-8 w-8 text-accent animate-spin" />
+      <Loader2 class="mx-auto h-8 w-8 text-accent animate-spin" />
       <div class="mt-2 text-sm text-content-secondary">正在获取IP信息...</div>
     </div>
   </ToolCard>
@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { ArrowPathIcon } from '@heroicons/vue/24/outline'
+import { Loader2 } from 'lucide-vue-next'
 import ToolCard from '../components/ToolCard.vue'
 import ErrorAlert from '../components/ErrorAlert.vue'
 

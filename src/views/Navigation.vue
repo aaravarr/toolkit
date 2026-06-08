@@ -2,13 +2,13 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import {
-  Bars3Icon,
-  XMarkIcon,
-  SunIcon,
-  MoonIcon,
-  HomeIcon,
-  EllipsisHorizontalCircleIcon,
-} from '@heroicons/vue/24/outline'
+  Menu,
+  X,
+  Sun,
+  Moon,
+  Home,
+  Ellipsis,
+} from 'lucide-vue-next'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { useDark } from '../composables/useDark'
 import { implementedTools, toolCategories, type Tool, type ToolCategory } from '../config/tools'
@@ -100,10 +100,13 @@ function navigate(path: string) {
         }"
         :title="!railHovered ? '首页' : undefined"
       >
-        <HomeIcon class="h-5 w-5 shrink-0" />
+        <Home class="h-[18px] w-[18px] shrink-0" />
         <span
-          class="text-sm font-medium whitespace-nowrap transition-all duration-200 overflow-hidden"
-          :class="railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0'"
+          class="text-[13px] whitespace-nowrap transition-all duration-200 overflow-hidden"
+          :class="[
+            railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0',
+            isCurrentRoute('/') ? 'font-medium' : 'font-normal',
+          ]"
         >
           首页
         </span>
@@ -113,7 +116,7 @@ function navigate(path: string) {
       <template v-for="category in toolCategories" :key="category.key">
         <!-- Category header — 收起时仅留小间距，展开时显示文字+正常间距 -->
         <div
-          class="text-[11px] font-semibold uppercase tracking-wider h-9 flex items-center overflow-hidden"
+          class="text-[11px] font-semibold uppercase tracking-wider h-9 flex items-center overflow-hidden opacity-75"
           :class="railHovered ? 'px-3 pb-1 items-end' : 'justify-center'"
           style="color: var(--text-tertiary)"
         >
@@ -141,10 +144,13 @@ function navigate(path: string) {
           }"
           :title="!railHovered ? item.name : undefined"
         >
-          <component :is="item.icon" class="h-5 w-5 shrink-0" />
+          <component :is="item.icon" class="h-[18px] w-[18px] shrink-0" />
           <span
-            class="text-sm font-medium whitespace-nowrap transition-all duration-200 overflow-hidden"
-            :class="railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0'"
+            class="text-[13px] whitespace-nowrap transition-all duration-200 overflow-hidden"
+            :class="[
+              railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0',
+              isCurrentRoute(item.path) ? 'font-medium' : 'font-normal',
+            ]"
           >
             {{ item.name }}
           </span>
@@ -168,10 +174,13 @@ function navigate(path: string) {
         }"
         :title="!railHovered ? '更多工具' : undefined"
       >
-        <EllipsisHorizontalCircleIcon class="h-5 w-5 shrink-0" />
+        <Ellipsis class="h-[18px] w-[18px] shrink-0" />
         <span
-          class="text-sm font-medium whitespace-nowrap transition-all duration-200 overflow-hidden"
-          :class="railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0'"
+          class="text-[13px] whitespace-nowrap transition-all duration-200 overflow-hidden"
+          :class="[
+            railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0',
+            isCurrentRoute('/more') ? 'font-medium' : 'font-normal',
+          ]"
         >
           更多工具
         </span>
@@ -191,8 +200,8 @@ function navigate(path: string) {
         }"
         :title="!railHovered ? (isDark ? '浅色模式' : '深色模式') : undefined"
       >
-        <SunIcon v-if="isDark" class="h-5 w-5 shrink-0" />
-        <MoonIcon v-else class="h-5 w-5 shrink-0" />
+        <Sun v-if="isDark" class="h-[18px] w-[18px] shrink-0" />
+        <Moon v-else class="h-[18px] w-[18px] shrink-0" />
         <span
           class="text-sm font-medium whitespace-nowrap transition-all duration-200 overflow-hidden"
           :class="railHovered ? 'opacity-100 delay-100 ml-3 w-auto' : 'opacity-0 ml-0 w-0'"
@@ -218,7 +227,7 @@ function navigate(path: string) {
         @click="drawerOpen = true"
       >
         <span class="sr-only">打开导航</span>
-        <Bars3Icon class="h-5 w-5" />
+        <Menu class="h-5 w-5" />
       </button>
 
       <!-- Logo + Title -->
@@ -234,8 +243,8 @@ function navigate(path: string) {
         style="color: var(--text-secondary)"
         @click="toggleDark"
       >
-        <SunIcon v-if="isDark" class="h-5 w-5" />
-        <MoonIcon v-else class="h-5 w-5" />
+        <Sun v-if="isDark" class="h-5 w-5" />
+        <Moon v-else class="h-5 w-5" />
       </button>
     </div>
 
@@ -282,7 +291,7 @@ function navigate(path: string) {
                   style="color: var(--text-tertiary)"
                   @click="drawerOpen = false"
                 >
-                  <XMarkIcon class="h-5 w-5" />
+                  <X class="h-5 w-5" />
                 </button>
               </div>
 
@@ -292,11 +301,11 @@ function navigate(path: string) {
                 <button
                   type="button"
                   @click="navigate('/')"
-                  class="flex items-center w-full gap-3 rounded-[10px] px-3 py-2 mb-1 text-sm font-medium transition-colors"
+                  class="flex items-center w-full gap-3 rounded-[10px] px-3 py-2 mb-1 text-[13px] transition-colors"
                   :class="[
                     isCurrentRoute('/')
-                      ? 'bg-accent-soft'
-                      : 'hover:bg-surface-tertiary',
+                      ? 'bg-accent-soft font-medium'
+                      : 'hover:bg-surface-tertiary font-normal',
                   ]"
                   :style="{ color: isCurrentRoute('/') ? 'var(--accent)' : 'var(--text-primary)' }"
                 >
@@ -307,7 +316,7 @@ function navigate(path: string) {
                 <!-- Categories -->
                 <template v-for="category in toolCategories" :key="category.key">
                   <p
-                    class="px-3 pt-5 pb-1 text-xs font-semibold uppercase tracking-wider"
+                    class="px-3 pt-5 pb-1 text-xs uppercase tracking-wider"
                     style="color: var(--text-tertiary)"
                   >
                     {{ category.label }}
@@ -317,11 +326,11 @@ function navigate(path: string) {
                     :key="item.name"
                     type="button"
                     @click="navigate(item.path)"
-                    class="flex items-center w-full gap-3 rounded-[10px] px-3 py-2 mb-0.5 text-sm font-medium transition-colors"
+                    class="flex items-center w-full gap-3 rounded-[10px] px-3 py-2 mb-0.5 text-[13px] transition-colors"
                     :class="[
                       isCurrentRoute(item.path)
-                        ? 'bg-accent-soft'
-                        : 'hover:bg-surface-tertiary',
+                        ? 'bg-accent-soft font-medium'
+                        : 'hover:bg-surface-tertiary font-normal',
                     ]"
                     :style="{ color: isCurrentRoute(item.path) ? 'var(--accent)' : 'var(--text-primary)' }"
                   >
@@ -334,11 +343,11 @@ function navigate(path: string) {
                 <button
                   type="button"
                   @click="navigate('/more')"
-                  class="flex items-center w-full gap-3 rounded-[10px] px-3 py-2 mt-3 mb-1 text-sm font-medium transition-colors"
+                  class="flex items-center w-full gap-3 rounded-[10px] px-3 py-2 mt-3 mb-1 text-[13px] transition-colors"
                   :class="[
                     isCurrentRoute('/more')
-                      ? 'bg-accent-soft'
-                      : 'hover:bg-surface-tertiary',
+                      ? 'bg-accent-soft font-medium'
+                      : 'hover:bg-surface-tertiary font-normal',
                   ]"
                   :style="{ color: isCurrentRoute('/more') ? 'var(--accent)' : 'var(--text-primary)' }"
                 >

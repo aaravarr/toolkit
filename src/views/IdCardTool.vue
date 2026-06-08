@@ -4,9 +4,9 @@ import dayjs from 'dayjs'
 import ToolCard from '../components/ToolCard.vue'
 import CopyButton from '../components/CopyButton.vue'
 import {
-  CheckCircleIcon,
-  ExclamationCircleIcon,
-} from '@heroicons/vue/24/outline'
+  CircleCheckBig,
+  AlertCircle,
+} from 'lucide-vue-next'
 
 const idInput = ref('')
 const error = ref('')
@@ -327,7 +327,7 @@ const infoItems = computed(() => {
         <label class="label-text">身份证号码</label>
         <input
           v-model="idInput"
-          class="input-field font-mono text-lg tracking-wider"
+          class="input-field font-mono tracking-wider"
           placeholder="请输入15位或18位身份证号码"
           maxlength="18"
         />
@@ -344,11 +344,11 @@ const infoItems = computed(() => {
           placeholder="粘贴或输入时间，如：2024-06-08、1717843200000"
         />
         <div v-if="targetDateError" class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500">
-          <ExclamationCircleIcon class="h-3.5 w-3.5 shrink-0" />
+          <AlertCircle class="h-3.5 w-3.5 shrink-0" />
           {{ targetDateError }}
         </div>
         <div v-else-if="targetDateParsed" class="mt-1.5 flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400">
-          <CheckCircleIcon class="h-3.5 w-3.5 shrink-0" />
+          <CircleCheckBig class="h-3.5 w-3.5 shrink-0" />
           解析为 {{ targetDateParsed.format('YYYY-MM-DD HH:mm:ss') }}
         </div>
         <p v-else class="mt-1.5 text-xs text-content-tertiary">
