@@ -47,6 +47,45 @@ const viewOptions = [
   { label: '表格', value: 'table', icon: Table2 },
 ]
 
+// 智能解析 JSON：支持直接 JSON、转义 JSON（{\"key\":\"val\"}）、双重编码 JSON
+function smartJsonParse(val: string): { parsed: any; error: string } {
+  // 1. 直接解析
+  try {
+    let parsed = JSON.parse(val)
+    // 如果结果是字符串，尝试解析内层 JSON（双重编码场景）
+    if (typeof parsed === 'string') {
+      try {
+        const inner = JSON.parse(parsed)
+        if (typeof inner === 'object' && inner !== null) {
+          parsed = inner
+        }
+      } catch {}
+    }
+    return { parsed, error: '' }
+  } catch (directError: any) {
+    // 2. 检测转义 JSON（包含 \"）
+    if (val.includes('\\"')) {
+      // 方法 A：包裹引号利用 JSON.parse 正确处理所有转义序列
+      try {
+        const unescaped = JSON.parse('"' + val + '"')
+        if (typeof unescaped === 'string') {
+          try {
+            return { parsed: JSON.parse(unescaped), error: '' }
+          } catch {}
+        }
+      } catch {}
+
+      // 方法 B：简单替换 \" → "
+      try {
+        const unescaped = val.replace(/\\"/g, '"')
+        return { parsed: JSON.parse(unescaped), error: '' }
+      } catch {}
+    }
+
+    return { parsed: null, error: directError.message || 'JSON 解析失败' }
+  }
+}
+
 // 自动解析 JSON
 watch(inputText, (val) => {
   if (!val.trim()) {
@@ -57,20 +96,19 @@ watch(inputText, (val) => {
     parseError.value = ''
     return
   }
-  try {
-    const parsed = JSON.parse(val)
-    parsedResult.value = parsed
-    treeData.value = parsed
-    parseError.value = ''
 
-    // 更新表格数据
-    updateTableData(parsed)
-  } catch (e: any) {
+  const { parsed, error } = smartJsonParse(val)
+  if (error) {
     parsedResult.value = null
     treeData.value = null
     tableData.value = []
     tableHeaders.value = []
-    parseError.value = e.message || 'JSON 解析失败'
+    parseError.value = error
+  } else {
+    parsedResult.value = parsed
+    treeData.value = parsed
+    parseError.value = ''
+    updateTableData(parsed)
   }
 }, { immediate: true })
 
@@ -111,14 +149,12 @@ function copyMinified() {
   }
 }
 
-// 格式化编辑器内容
+// 格式化编辑器内容（同时去转义）
 function formatEditorContent() {
   if (!inputText.value.trim()) return
-  try {
-    const parsed = JSON.parse(inputText.value)
+  const { parsed, error } = smartJsonParse(inputText.value)
+  if (!error && parsed !== null) {
     inputText.value = JSON.stringify(parsed, null, indentSize.value)
-  } catch (e) {
-    // 如果解析失败，不做任何操作
   }
 }
 
@@ -262,7 +298,7 @@ function formatCell(value: any): string {
         <div class="flex-1 min-h-0">
           <JsonEditor
             v-model="inputText"
-            placeholder="粘贴 JSON 数据..."
+            placeholder='粘贴 JSON 数据，支持转义格式 {\"key\":\"val\"}'
           />
         </div>
         <!-- 错误提示 -->
