@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import ToolCard from '../components/ToolCard.vue'
 import CopyButton from '../components/CopyButton.vue'
+import CustomSelect from '../components/CustomSelect.vue'
 import { ArrowLeftRight, FileJson, FileText, Eraser, FileCode, AlignLeft, Minus } from 'lucide-vue-next'
 import { jsonToYaml, yamlToJson, jsonExample, yamlExample } from '../utils/yaml'
 
@@ -150,13 +151,10 @@ function handleDrop(e: DragEvent) {
           <button class="btn-secondary !px-2.5 !py-1 text-xs" @click="formatJson(false)">
             <Minus class="w-3.5 h-3.5 mr-1 inline" />压缩
           </button>
-          <select
+          <CustomSelect
             v-model="jsonIndent"
-            class="select-field !w-auto !py-1 !pr-8 !text-xs"
-          >
-            <option :value="2">2 空格</option>
-            <option :value="4">4 空格</option>
-          </select>
+            :options="[{ label: '2 空格', value: 2 }, { label: '4 空格', value: 4 }]"
+          />
         </div>
       </template>
 

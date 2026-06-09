@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import CryptoJS from 'crypto-js'
 import ToolCard from '../components/ToolCard.vue'
 import CopyButton from '../components/CopyButton.vue'
+import CustomSelect from '../components/CustomSelect.vue'
 
 // 编码类型定义
 interface EncodingType {
@@ -482,16 +483,12 @@ const toggleMode = () => {
       <div class="space-y-4">
         <div>
           <label class="label-text">编码类型</label>
-          <div class="mt-1 relative rounded-md shadow-sm">
-            <select
-              v-model="selectedEncoding"
-              @change="processText"
-              class="select-field"
-            >
-              <option v-for="type in encodingTypes" :key="type.id" :value="type.id">
-                {{ type.name }} - {{ type.description }}
-              </option>
-            </select>
+          <div class="mt-1">
+            <CustomSelect
+              :modelValue="selectedEncoding"
+              @update:modelValue="v => { selectedEncoding = v as string; processText() }"
+              :options="encodingTypes.map(t => ({ label: `${t.name} - ${t.description}`, value: t.id }))"
+            />
           </div>
         </div>
       </div>

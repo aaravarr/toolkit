@@ -197,6 +197,13 @@ export const implementedTools: Tool[] = [
     path: '/markdown',
     icon: FileText,
     category: 'dev'
+  },
+  {
+    name: '身份证生成',
+    description: '指定省份、日期、性别批量生成模拟身份证号',
+    path: '/id-card-generator',
+    icon: Fingerprint,
+    category: 'utility'
   }
 ]
 

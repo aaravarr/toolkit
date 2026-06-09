@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue'
 import QRCode from 'qrcode'
 import type { QRCodeErrorCorrectionLevel } from 'qrcode'
 import ToolCard from '../components/ToolCard.vue'
+import CustomSelect from '../components/CustomSelect.vue'
 import {
   Download,
   RotateCcw,
@@ -235,11 +236,10 @@ const showTextInput = computed(() => ['text', 'url'].includes(contentType.value)
           <div class="flex gap-4">
             <div class="flex-1">
               <label class="label-text">加密方式</label>
-              <select v-model="wifiEncryption" class="select-field">
-                <option value="WPA">WPA/WPA2</option>
-                <option value="WEP">WEP</option>
-                <option value="nopass">无密码</option>
-              </select>
+              <CustomSelect
+                v-model="wifiEncryption"
+                :options="[{ label: 'WPA/WPA2', value: 'WPA' }, { label: 'WEP', value: 'WEP' }, { label: '无密码', value: 'nopass' }]"
+              />
             </div>
             <div class="flex items-end pb-1">
               <label class="inline-flex items-center gap-2 cursor-pointer">

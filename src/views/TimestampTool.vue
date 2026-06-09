@@ -8,6 +8,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat'
 import 'dayjs/locale/zh-cn'
 import ToolCard from '../components/ToolCard.vue'
 import CopyButton from '../components/CopyButton.vue'
+import CustomSelect from '../components/CustomSelect.vue'
 import {
   Clock,
   Sparkles,
@@ -358,9 +359,10 @@ function applyFormat(fmt: string) {
       <section v-if="parsedDate">
         <h2 class="text-sm font-semibold text-content-secondary mb-3">时区转换</h2>
         <div class="flex flex-col sm:flex-row gap-2">
-          <select v-model="selectedTimezone" class="select-field sm:w-64">
-            <option v-for="tz in timezones" :key="tz" :value="tz">{{ tz }}</option>
-          </select>
+          <CustomSelect
+            v-model="selectedTimezone"
+            :options="timezones.map(tz => ({ label: tz, value: tz }))"
+          />
         </div>
         <p class="mt-2 text-sm font-mono text-content-primary">{{ timezoneResult }}</p>
       </section>
@@ -398,9 +400,10 @@ function applyFormat(fmt: string) {
             type="number"
             placeholder="数字"
           />
-          <select v-model="calcUnit" class="select-field sm:w-28">
-            <option v-for="u in calcUnits" :key="u.value" :value="u.value">{{ u.label }}</option>
-          </select>
+          <CustomSelect
+            v-model="calcUnit"
+            :options="calcUnits"
+          />
           <button @click="calculateTime" class="btn-primary whitespace-nowrap">计算</button>
         </div>
         <p v-if="calcResult" class="mt-2 text-sm font-mono text-content-primary">{{ calcResult }}</p>

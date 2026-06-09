@@ -16,14 +16,7 @@
       <div>
         <label class="label-text">选择分隔符</label>
         <div class="flex flex-col gap-2">
-          <select v-model="selectedDelimiter" class="select-field">
-            <option value="\n">换行符</option>
-            <option value=",">逗号</option>
-            <option value=";">分号</option>
-            <option value=" ">空格</option>
-            <option value="\t">制表符</option>
-            <option value="custom">自定义</option>
-          </select>
+          <CustomSelect v-model="selectedDelimiter" :options="delimiterOptions" />
           <textarea
             v-if="selectedDelimiter === 'custom'"
             v-model="customDelimiter"
@@ -168,6 +161,16 @@ import { ref, computed, watch } from 'vue'
 import { Copy } from 'lucide-vue-next'
 import ToolCard from '../components/ToolCard.vue'
 import CopyButton from '../components/CopyButton.vue'
+import CustomSelect from '../components/CustomSelect.vue'
+
+const delimiterOptions = [
+  { label: '换行符', value: '\\n' },
+  { label: '逗号', value: ',' },
+  { label: '分号', value: ';' },
+  { label: '空格', value: ' ' },
+  { label: '制表符', value: '\\t' },
+  { label: '自定义', value: 'custom' },
+]
 
 const selectedDelimiter = ref('\\n')
 const customDelimiter = ref('')

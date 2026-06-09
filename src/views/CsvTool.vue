@@ -6,22 +6,11 @@
     <!-- 输入区域 -->
     <div class="space-y-4">
       <!-- 切换按钮 -->
-      <div class="flex justify-center space-x-4">
-        <button
-          @click="inputMode = 'file'"
-          :class="[
-            'px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 cursor-pointer',
-            inputMode === 'file'
-              ? 'btn-primary'
-              : 'btn-secondary'
-          ]"
-        >
-          文件上传
-        </button>
+      <div class="flex justify-center gap-2">
         <button
           @click="inputMode = 'text'"
           :class="[
-            'px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 cursor-pointer',
+            'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 cursor-pointer',
             inputMode === 'text'
               ? 'btn-primary'
               : 'btn-secondary'
@@ -29,11 +18,22 @@
         >
           文本输入
         </button>
+        <button
+          @click="inputMode = 'file'"
+          :class="[
+            'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 cursor-pointer',
+            inputMode === 'file'
+              ? 'btn-primary'
+              : 'btn-secondary'
+          ]"
+        >
+          文件上传
+        </button>
       </div>
 
       <!-- 文件上传区域 -->
       <div v-if="inputMode === 'file'"
-        class="border-2 border-dashed border-line rounded-lg p-4 sm:p-12 text-center cursor-pointer hover:border-accent transition-colors"
+        class="border-[1.5px] border-dashed border-line rounded-xl p-6 sm:p-10 text-center cursor-pointer hover:border-accent transition-colors"
         @dragover.prevent
         @drop.prevent="handleDrop"
         @click="triggerFileInput"
@@ -45,26 +45,23 @@
           class="hidden"
           @change="handleFileUpload"
         />
-        <div class="space-y-4">
-          <Upload class="mx-auto h-8 w-8 sm:h-12 sm:w-12 text-content-tertiary" />
-          <p v-if="!fileName" class="text-content-secondary text-sm sm:text-base">拖拽文件到此处或点击上传</p>
-          <p v-else class="text-content-secondary text-sm sm:text-base">已上传文件: {{ fileName }}</p>
-          <p class="text-xs sm:text-sm text-content-secondary">支持CSV、Excel文件</p>
+        <div class="space-y-2">
+          <Upload class="mx-auto h-8 w-8 text-content-tertiary" />
+          <p v-if="!fileName" class="text-sm text-content-secondary">拖拽文件到此处或点击上传</p>
+          <p v-else class="text-sm text-content-secondary">已上传文件: {{ fileName }}</p>
+          <p class="text-xs text-content-tertiary">支持 CSV、Excel 文件</p>
         </div>
       </div>
 
       <!-- 文本输入区域 -->
       <div v-else>
-        <div class="mt-1 relative rounded-md shadow-sm">
-          <textarea
-            id="csv-input"
-            v-model="csvText"
-            class="textarea-field h-[240px] resize-none overflow-y-auto"
-            placeholder="请输入CSV格式的数据，每行一条记录，字段之间用逗号分隔"
-            @input="handleTextInput"
-            style="height: 240px !important;"
-          ></textarea>
-        </div>
+        <textarea
+          id="csv-input"
+          v-model="csvText"
+          class="textarea-field h-60 resize-none overflow-y-auto"
+          placeholder="请输入CSV格式的数据，每行一条记录，字段之间用逗号分隔"
+          @input="handleTextInput"
+        ></textarea>
       </div>
     </div>
 
@@ -76,24 +73,24 @@
     <div v-else-if="csvData.length" class="mt-6">
       <!-- 导出按钮 -->
       <div class="mb-4">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
           <button
             @click="downloadCsv"
-            class="w-full inline-flex items-center justify-center rounded-lg bg-blue-50 px-4 py-3 sm:py-4 text-sm font-semibold text-blue-600 shadow-sm ring-1 ring-inset ring-blue-200 hover:bg-blue-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            class="w-full inline-flex items-center justify-center rounded-lg bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-600 ring-1 ring-inset ring-blue-200 hover:bg-blue-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             :disabled="!csvData.length"
           >
-            <Download class="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+            <Download class="h-4 w-4 mr-1.5" />
             导出CSV
           </button>
           <button
             @click="downloadExcel"
-            class="w-full inline-flex items-center justify-center rounded-lg bg-green-50 px-4 py-3 sm:py-4 text-sm font-semibold text-green-600 shadow-sm ring-1 ring-inset ring-green-200 hover:bg-green-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            class="w-full inline-flex items-center justify-center rounded-lg bg-green-50 px-3 py-2 text-xs font-semibold text-green-600 ring-1 ring-inset ring-green-200 hover:bg-green-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             :disabled="!csvData.length"
           >
-            <Download class="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+            <Download class="h-4 w-4 mr-1.5" />
             导出Excel
           </button>
-          <CopyButton :text="csvTextForCopy" label="复制到剪贴板" class="w-full !py-3 sm:!py-4" />
+          <CopyButton :text="csvTextForCopy" label="复制到剪贴板" class="w-full" size="sm" />
         </div>
       </div>
 
@@ -172,35 +169,30 @@
     <div v-if="csvData.length" class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
         <span class="text-sm text-content-secondary">每页显示:</span>
-        <select
-          v-model="pageSize"
-          class="select-field w-32"
-          @change="handlePageSizeChange"
-        >
-          <option value="50">50行</option>
-          <option value="100">100行</option>
-          <option value="200">200行</option>
-          <option value="500">500行</option>
-        </select>
+        <CustomSelect
+          :modelValue="pageSize"
+          @update:modelValue="v => { pageSize = v as number; handlePageSizeChange() }"
+          :options="[{ label: '50行', value: 50 }, { label: '100行', value: 100 }, { label: '200行', value: 200 }, { label: '500行', value: 500 }]"
+        />
       </div>
       <div class="flex flex-col sm:flex-row items-center gap-4">
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5">
           <button
             @click="prevPage"
             :disabled="currentPage === 1"
-            class="btn-secondary !p-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="btn-secondary !px-1.5 !py-1 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <ChevronLeft class="h-5 w-5" />
+            <ChevronLeft class="w-3.5 h-3.5" />
           </button>
-          <div class="flex items-center gap-1">
+          <div class="flex items-center gap-0.5">
             <button
               v-for="page in displayedPages"
               :key="page"
               @click="goToPage(page)"
               :class="[
-                'inline-flex items-center justify-center w-8 h-8 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer',
+                'inline-flex items-center justify-center w-7 h-7 text-xs font-medium rounded-md transition-colors duration-200 cursor-pointer',
                 page === currentPage
-                  ? 'btn-primary !w-8 !h-8 !p-0'
+                  ? 'btn-primary !w-7 !h-7 !p-0 !text-xs'
                   : 'text-content-primary hover:bg-surface-secondary'
               ]"
             >
@@ -210,9 +202,9 @@
           <button
             @click="nextPage"
             :disabled="currentPage === totalPages"
-            class="btn-secondary !p-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="btn-secondary !px-1.5 !py-1 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <ChevronRight class="h-5 w-5" />
+            <ChevronRight class="w-3.5 h-3.5" />
           </button>
         </div>
         <span class="text-sm text-content-secondary">
@@ -240,6 +232,7 @@ import {
 import ToolCard from '../components/ToolCard.vue'
 import CopyButton from '../components/CopyButton.vue'
 import ErrorAlert from '../components/ErrorAlert.vue'
+import CustomSelect from '../components/CustomSelect.vue'
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const csvText = ref('')
@@ -256,7 +249,7 @@ const dragStartX = ref(0)
 const dragStartY = ref(0)
 const dragOffsetX = ref(0)
 const dragOffsetY = ref(0)
-const inputMode = ref<'file' | 'text'>('file')
+const inputMode = ref<'file' | 'text'>('text')
 const fileName = ref('')
 const errorMessage = ref('')
 
@@ -762,7 +755,8 @@ td:focus-within {
   outline-offset: -2px;
 }
 
-textarea, input[type="text"] {
+/* 表格内单元格 textarea */
+td textarea, td input[type="text"] {
   width: 100%;
   height: 100%;
   border: none;
@@ -780,7 +774,7 @@ textarea, input[type="text"] {
   font-family: inherit;
 }
 
-textarea:focus, input[type="text"]:focus {
+td textarea:focus, td input[type="text"]:focus {
   background-color: transparent !important;
 }
 

@@ -138,6 +138,12 @@ const router = createRouter({
       meta: { title: 'Markdown 编辑器', description: '在线Markdown编辑器，实时预览、工具栏、同步滚动、导出HTML。' }
     },
     {
+      path: '/id-card-generator',
+      name: 'id-card-generator',
+      component: () => import('../views/IdCardGeneratorTool.vue'),
+      meta: { title: '身份证号码生成', description: '在线随机身份证号码生成器，可指定省份、出生日期、性别批量生成模拟身份证号。' }
+    },
+    {
       path: '/more',
       name: 'more',
       component: () => import('../views/MoreView.vue'),

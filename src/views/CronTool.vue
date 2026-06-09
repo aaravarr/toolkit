@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue'
 import dayjs from 'dayjs'
 import ToolCard from '../components/ToolCard.vue'
 import CopyButton from '../components/CopyButton.vue'
+import CustomSelect from '../components/CustomSelect.vue'
 import {
   RotateCcw,
   Clock,
@@ -639,12 +640,10 @@ watch(fields, () => {
             未来执行时间
           </label>
           <div class="flex items-center gap-2">
-            <select v-model.number="nextExecCount" class="select-field text-xs py-1 px-2 w-24">
-              <option :value="5">5 次</option>
-              <option :value="10">10 次</option>
-              <option :value="20">20 次</option>
-              <option :value="50">50 次</option>
-            </select>
+            <CustomSelect
+              v-model="nextExecCount"
+              :options="[{ label: '5 次', value: 5 }, { label: '10 次', value: 10 }, { label: '20 次', value: 20 }, { label: '50 次', value: 50 }]"
+            />
             <button
               @click="showNextExec = !showNextExec"
               class="text-xs text-content-tertiary hover:text-content-secondary flex items-center gap-1 cursor-pointer"

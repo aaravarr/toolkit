@@ -4,87 +4,116 @@ import { ChevronDown } from 'lucide-vue-next'
 
 export interface SelectOption {
   label: string
-  value: any
-  icon?: any
+  value: string | number
+  disabled?: boolean
 }
 
-const props = defineProps<{
-  modelValue: any
+const props = withDefaults(defineProps<{
   options: SelectOption[]
+  modelValue: string | number
   placeholder?: string
-}>()
+  disabled?: boolean
+}>(), {
+  placeholder: '请选择',
+  disabled: false,
+})
 
 const emit = defineEmits<{
-  'update:modelValue': [value: any]
+  (e: 'update:modelValue', value: string | number): void
 }>()
 
 const isOpen = ref(false)
-const dropdownRef = ref<HTMLElement | null>(null)
+const selectRef = ref<HTMLDivElement | null>(null)
+const dropdownStyle = ref<Record<string, string>>({})
 
-const selectedOption = computed(() => {
-  return props.options.find(opt => opt.value === props.modelValue)
+const selectedLabel = computed(() => {
+  const found = props.options.find(o => o.value === props.modelValue)
+  return found ? found.label : props.placeholder
 })
 
-function selectOption(option: SelectOption) {
+function updateDropdownPosition() {
+  if (!selectRef.value) return
+  const rect = selectRef.value.getBoundingClientRect()
+  dropdownStyle.value = {
+    position: 'fixed',
+    top: `${rect.bottom + 4}px`,
+    left: `${rect.left}px`,
+    minWidth: `${rect.width}px`,
+    zIndex: '9999',
+  }
+}
+
+function toggle() {
+  if (props.disabled) return
+  if (!isOpen.value) {
+    updateDropdownPosition()
+  }
+  isOpen.value = !isOpen.value
+}
+
+function select(option: SelectOption) {
+  if (option.disabled) return
   emit('update:modelValue', option.value)
   isOpen.value = false
 }
 
-function toggleDropdown() {
-  isOpen.value = !isOpen.value
+function handleClickOutside(e: MouseEvent) {
+  if (selectRef.value && !selectRef.value.contains(e.target as Node)) {
+    // Also check if click is on the teleported dropdown
+    const dropdown = document.querySelector('.custom-select__dropdown--portal')
+    if (dropdown && dropdown.contains(e.target as Node)) return
+    isOpen.value = false
+  }
 }
 
-function handleClickOutside(event: MouseEvent) {
-  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
-    isOpen.value = false
+function handleScroll() {
+  if (isOpen.value) {
+    updateDropdownPosition()
   }
 }
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  window.addEventListener('scroll', handleScroll, true)
 })
-
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside)
+  window.removeEventListener('scroll', handleScroll, true)
 })
 </script>
 
 <template>
-  <div ref="dropdownRef" class="custom-select">
+  <div ref="selectRef" class="custom-select" :class="{ 'custom-select--disabled': disabled }">
     <button
       type="button"
-      class="select-trigger"
-      :class="{ active: isOpen }"
-      @click="toggleDropdown"
+      class="custom-select__trigger"
+      :class="{ 'custom-select__trigger--open': isOpen }"
+      @click="toggle"
     >
-      <span class="select-value">
-        <component v-if="selectedOption?.icon" :is="selectedOption.icon" class="w-3 h-3" />
-        <span>{{ selectedOption?.label || placeholder || '请选择' }}</span>
-      </span>
+      <span class="custom-select__value">{{ selectedLabel }}</span>
       <ChevronDown
-        class="w-3 h-3 transition-transform duration-200"
-        :class="{ 'rotate-180': isOpen }"
+        class="custom-select__arrow"
+        :class="{ 'custom-select__arrow--open': isOpen }"
       />
     </button>
-
-    <Transition name="dropdown">
-      <div
-        v-if="isOpen"
-        class="dropdown-menu"
-      >
-        <button
-          v-for="option in options"
-          :key="option.value"
-          type="button"
-          class="dropdown-item"
-          :class="{ selected: option.value === modelValue }"
-          @click="selectOption(option)"
-        >
-          <component v-if="option.icon" :is="option.icon" class="w-3 h-3" />
-          <span>{{ option.label }}</span>
-        </button>
-      </div>
-    </Transition>
+    <Teleport to="body">
+      <Transition name="dropdown">
+        <div v-if="isOpen" class="custom-select__dropdown custom-select__dropdown--portal" :style="dropdownStyle">
+          <div
+            v-for="option in options"
+            :key="option.value"
+            class="custom-select__option"
+            :class="{
+              'custom-select__option--active': option.value === modelValue,
+              'custom-select__option--disabled': option.disabled,
+            }"
+            @click="select(option)"
+          >
+            {{ option.label }}
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -92,89 +121,124 @@ onBeforeUnmount(() => {
 .custom-select {
   position: relative;
   display: inline-block;
+  min-width: 0;
 }
 
-.select-trigger {
+.custom-select--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.custom-select__trigger {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.375rem;
-  padding: 0.25rem 0.5rem;
-  min-width: 5rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  line-height: 1.25rem;
+  gap: 6px;
+  width: 100%;
+  padding: 5px 28px 5px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-primary);
   color: var(--text-primary);
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
   cursor: pointer;
-  transition: all 0.15s ease;
-  height: 2rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  text-align: left;
+  white-space: nowrap;
+  position: relative;
 }
 
-.select-trigger:hover {
+.custom-select__trigger:hover {
   border-color: var(--border-hover);
 }
 
-.select-trigger.active {
+.custom-select__trigger--open,
+.custom-select__trigger:focus {
+  outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent-soft);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
-.select-value {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
+.custom-select__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
 }
 
-.dropdown-menu {
+.custom-select__arrow {
   position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  margin-top: 0.25rem;
-  padding: 0.25rem;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 50;
-  min-width: 100%;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--text-tertiary);
+  transition: transform 0.2s ease;
+  pointer-events: none;
 }
 
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  width: 100%;
-  padding: 0.375rem 0.5rem;
-  font-size: 0.75rem;
+.custom-select__arrow--open {
+  transform: translateY(-50%) rotate(180deg);
+}
+</style>
+
+<style>
+/* Portal dropdown styles - not scoped so they apply to teleported element */
+.custom-select__dropdown--portal {
+  max-height: 240px;
+  overflow-y: auto;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-primary);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  padding: 4px;
+}
+
+.dark .custom-select__dropdown--portal {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.custom-select__dropdown--portal .custom-select__option {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.8125rem;
   color: var(--text-primary);
-  background: transparent;
-  border: none;
-  border-radius: 0.25rem;
   cursor: pointer;
-  transition: all 0.15s ease;
-  text-align: left;
+  transition: background-color 0.1s ease;
+  white-space: nowrap;
 }
 
-.dropdown-item:hover {
-  background: var(--bg-secondary);
+.custom-select__dropdown--portal .custom-select__option:hover {
+  background: var(--bg-tertiary);
 }
 
-.dropdown-item.selected {
+.custom-select__dropdown--portal .custom-select__option--active {
   background: var(--accent-soft);
   color: var(--accent);
+  font-weight: 500;
 }
 
-/* 动画 */
-.dropdown-enter-active,
+.custom-select__dropdown--portal .custom-select__option--active:hover {
+  background: var(--accent-soft);
+}
+
+.custom-select__dropdown--portal .custom-select__option--disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Dropdown animation */
+.dropdown-enter-active {
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
 .dropdown-leave-active {
-  transition: all 0.15s ease;
+  transition: opacity 0.1s ease, transform 0.1s ease;
 }
-
-.dropdown-enter-from,
+.dropdown-enter-from {
+  opacity: 0;
+  transform: translateY(-4px);
+}
 .dropdown-leave-to {
   opacity: 0;
   transform: translateY(-4px);
