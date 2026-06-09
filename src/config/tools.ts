@@ -23,6 +23,7 @@ import {
   Hash,
   QrCode,
   Timer,
+  Regex,
 } from 'lucide-vue-next'
 
 // 工具分类类型
@@ -167,6 +168,34 @@ export const implementedTools: Tool[] = [
     description: '可视化生成和解析Cron定时任务表达式',
     path: '/cron',
     icon: Timer,
+    category: 'dev'
+  },
+  {
+    name: '正则表达式',
+    description: '实时匹配高亮、分组解析、常用模板',
+    path: '/regex',
+    icon: Regex,
+    category: 'dev'
+  },
+  {
+    name: 'JWT 解析器',
+    description: '解码JWT Token，查看Header/Payload/过期时间',
+    path: '/jwt',
+    icon: KeyRound,
+    category: 'dev'
+  },
+  {
+    name: 'JSON YAML 转换',
+    description: 'JSON与YAML在线互转，支持格式化',
+    path: '/json-yaml',
+    icon: ArrowLeftRight,
+    category: 'convert'
+  },
+  {
+    name: 'Markdown 编辑器',
+    description: '实时预览、工具栏、同步滚动、导出',
+    path: '/markdown',
+    icon: FileText,
     category: 'dev'
   }
 ]

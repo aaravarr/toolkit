@@ -114,6 +114,30 @@ const router = createRouter({
       meta: { title: 'Cron 表达式生成器', description: '可视化生成和解析 Cron 定时任务表达式，支持常用预设、人类可读描述和未来执行时间预览。' }
     },
     {
+      path: '/json-yaml',
+      name: 'json-yaml',
+      component: () => import('../views/JsonYamlTool.vue'),
+      meta: { title: 'JSON YAML 转换', description: 'JSON与YAML在线互转工具，支持格式化、压缩、错误定位。' }
+    },
+    {
+      path: '/regex',
+      name: 'regex',
+      component: () => import('../views/RegexTool.vue'),
+      meta: { title: '正则表达式测试', description: '在线正则表达式测试工具，实时匹配高亮、分组解析、常用正则模板。' }
+    },
+    {
+      path: '/jwt',
+      name: 'jwt',
+      component: () => import('../views/JwtTool.vue'),
+      meta: { title: 'JWT 解析器', description: '在线JWT Token解析工具，解码Header/Payload，判断过期时间。' }
+    },
+    {
+      path: '/markdown',
+      name: 'markdown',
+      component: () => import('../views/MarkdownTool.vue'),
+      meta: { title: 'Markdown 编辑器', description: '在线Markdown编辑器，实时预览、工具栏、同步滚动、导出HTML。' }
+    },
+    {
       path: '/more',
       name: 'more',
       component: () => import('../views/MoreView.vue'),
