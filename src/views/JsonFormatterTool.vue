@@ -436,10 +436,10 @@ function formatCell(value: any): string {
             <div class="flex items-center gap-1">
               <button
                 v-if="minifiedOutput"
-                class="btn-sm inline-flex items-center justify-center font-semibold transition-all duration-150 cursor-pointer rounded-lg px-2.5 py-1.5 text-xs gap-1"
+                class="inline-flex items-center justify-center font-semibold transition-all duration-150 rounded-md px-[10px] py-1 text-[0.6875rem] gap-1"
                 :class="minifiedCopied
-                  ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-300 dark:bg-green-900/30 dark:text-green-400 dark:ring-green-700'
-                  : 'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]'"
+                  ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-300 dark:bg-green-900/30 dark:text-green-400 dark:ring-green-700 cursor-default'
+                  : 'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] cursor-pointer'"
                 :disabled="minifiedCopied"
                 @click="copyMinified"
                 :title="minifiedCopied ? '已复制' : '复制压缩结果'"
