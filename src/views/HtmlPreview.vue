@@ -6,47 +6,7 @@ import SegmentedControl from '../components/SegmentedControl.vue'
 
 type ViewMode = 'split' | 'editor' | 'preview'
 
-const htmlCode = ref(`<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-      body {
-        font-family: system-ui, -apple-system, sans-serif;
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        background: linear-gradient(135deg, #eff6ff, #f8fafc);
-        color: #111827;
-      }
-      .card {
-        width: min(420px, calc(100% - 2rem));
-        padding: 24px;
-        border-radius: 16px;
-        background: white;
-        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      }
-      h1 {
-        margin: 0 0 8px;
-        font-size: 1.5rem;
-      }
-      p {
-        margin: 0;
-        color: #6b7280;
-        line-height: 1.6;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="card">
-      <h1>HTML 预览</h1>
-      <p>在左侧编辑 HTML，右侧会实时渲染效果。也可以切换到全屏编辑或全屏预览。</p>
-    </div>
-  </body>
-</html>`)
-
+const htmlCode = ref('')
 const viewMode = ref<ViewMode>('split')
 const isImmersive = ref(false)
 const previewFrame = ref<HTMLIFrameElement | null>(null)
