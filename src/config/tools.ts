@@ -116,7 +116,7 @@ export const implementedTools: Tool[] = [
   },
   {
     name: 'HTML预览',
-    description: '实时预览HTML代码效果',
+    description: '实时预览HTML代码效果，支持全屏编辑与全屏预览',
     path: '/html-preview',
     icon: SquareCode,
     category: 'dev'

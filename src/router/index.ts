@@ -51,7 +51,7 @@ const router = createRouter({
       path: '/html-preview',
       name: 'html-preview',
       component: () => import('../views/HtmlPreview.vue'),
-      meta: { title: 'HTML 预览', description: '在线实时预览HTML代码效果，支持CSS和JavaScript。' }
+      meta: { title: 'HTML 预览', description: '在线实时预览HTML代码效果，支持CSS/JavaScript，以及全屏编辑与全屏预览视图。' }
     },
     {
       path: '/csv-tool',
@@ -182,3 +182,4 @@ router.afterEach((to) => {
 })
 
 export default router
+
